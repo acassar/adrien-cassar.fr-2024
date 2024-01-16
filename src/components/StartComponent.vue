@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import RacketComponent from './pong/RacketComponent.vue';
+
 
 </script>
 
 <template>
-  <div >
-    test
+  <div>
+    <RacketComponent />
   </div>
 </template>
 
