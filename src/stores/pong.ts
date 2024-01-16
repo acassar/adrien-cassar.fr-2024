@@ -1,6 +1,6 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
-import { RACKET_SPEED, RACKET_WIDTH, SPACE_SIDES } from '@/components/data/PongData';
+import { RACKET_HEIGHT, RACKET_SPEED, RACKET_WIDTH, SPACE_SIDES } from '@/components/data/PongData';
 
 type Coords = { x: number, y: number}
 type PlayerKeyType = null | undefined | "ArrowUp" | "ArrowDown"
@@ -36,7 +36,8 @@ export const usePongStore = defineStore('pong', () => {
 	};
 
 	const moveDown = (type: 'player' | 'enemy') => {
-		if (type === 'player') {
+
+		if (type === 'player' && playerCoords.value.y + RACKET_HEIGHT < window.innerHeight ) {
 			setPlayerCoords({ x: playerCoords.value.x, y: playerCoords.value.y + RACKET_SPEED });
 		} else if (type === 'enemy') {
 			setEnemyCoords({ x: enemyCoords.value.x, y: enemyCoords.value.y + RACKET_SPEED });
@@ -44,7 +45,7 @@ export const usePongStore = defineStore('pong', () => {
 	};
 
 	const moveUp = (type: 'player' | 'enemy') => {
-		if (type === 'player') {
+		if (type === 'player' && playerCoords.value.y > 0) {
 			setPlayerCoords({ x: playerCoords.value.x, y: playerCoords.value.y - RACKET_SPEED });
 		} else if (type === 'enemy') {
 			setEnemyCoords({ x: enemyCoords.value.x, y: enemyCoords.value.y - RACKET_SPEED });

@@ -13,7 +13,7 @@ const pressingDown = ref<Set<string>>(new Set());
 onMounted(() => {
 	setInterval(() => {
 		movePlayer();
-	}, 10);
+	}, 1);
 });
 
 document.addEventListener('keydown', (e) => {

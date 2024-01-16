@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { RACKET_HEIGHT, RACKET_WIDTH } from '../data/PongData';
+
 defineProps<{
 	type : 'player ' | 'enemy'
 	coords: {x: number, y: number}
@@ -7,15 +9,13 @@ defineProps<{
 
 <template>
   <div
-    :style="`top: ${coords.y}px; left: ${coords.x}px;`"
+    :style="`top: ${coords.y}px; left: ${coords.x}px; width: ${RACKET_WIDTH}px; height: ${RACKET_HEIGHT}px;`"
     :class="`racket ${type}`"
   />
 </template>
 
 <style scoped>
 .racket {
-    width: 0.5rem;
-    height: 3rem;
     position: absolute;
     /* top: 0px; */
 }
