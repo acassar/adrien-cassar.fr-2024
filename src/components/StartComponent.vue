@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import RacketComponent from './pong/RacketComponent.vue';
+import GameComponent from './pong/GameComponent.vue';
 
 
 </script>
 
 <template>
   <div>
-    <RacketComponent />
+    <GameComponent />
   </div>
 </template>
 
