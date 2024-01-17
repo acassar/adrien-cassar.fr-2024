@@ -13,19 +13,25 @@ const { playerCoords, enemyCoords, ballCoords, end} = storeToRefs(pongStore);
 const { setPlayerKey, play } = pongStore;
 const pressingDown = ref<Set<string>>(new Set());
 const start = ref(false);
+const counter = ref(0);
 
 const startGame = () => {
-	console.log("test");
-
+	counter.value = 3;
 	start.value = true;
+	setInterval(() => {
+		counter.value -= 1;
+		if (counter.value === 0) {
+			initPlay();
+		}
+	}, 1000);
 };
 
-onMounted(() => {
+const initPlay = () => {
 	setInterval(() => {
 		if (!end.value && start.value)
 			play();
 	}, 1);
-});
+};
 
 const keyUpEvent = (e: KeyboardEvent) => {
 	pressingDown.value.delete(e.key);
@@ -57,6 +63,13 @@ onUnmounted(() => {
 </script>
 
 <template>
+  <h1
+    v-if="counter > 0"
+    class="counter"
+  >
+    {{ counter }}
+  </h1>
+
   <ModalComponent v-if="!start">
     <template #default>
       <h2 class="title">
@@ -91,6 +104,13 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
+.counter {
+	left: 50%;
+	top: 40%;
+	position: fixed;
+    transform: translate(-50%, -50%);
+	font-size: 50px;
+}
 .title {
 	font-size: 2rem;
     margin-bottom: 1rem;
