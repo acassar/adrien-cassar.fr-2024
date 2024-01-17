@@ -56,9 +56,11 @@ export const usePongStore = defineStore('pong', () => {
 			switch (playerKey.value) {
 				case "ArrowUp":
 					moveUp("player");
+					moveUp("enemy");
 					break;
 				case "ArrowDown":
 					moveDown("player");
+					moveDown("enemy");
 					break;
 				default:
 					break;

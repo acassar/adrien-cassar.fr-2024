@@ -6,6 +6,10 @@ import { handleRacketCollisions } from "./BoundariesService";
 	 */
 export const moveBall = () => {
 	const {setBallCoords, ballCoords, ballDir, newCoordsInBoundaries, playerCoords, enemyCoords} = usePongStore();
+
+	/* The code is updating the coordinates of the ball based on the collisions with the player's racket,
+    the enemy's racket, and the boundaries of the game. */
 	setBallCoords(handleRacketCollisions(playerCoords, ballCoords, ballDir));
+	setBallCoords(handleRacketCollisions(enemyCoords, ballCoords, ballDir));
 	setBallCoords(newCoordsInBoundaries(ballCoords, ballDir));
 };
