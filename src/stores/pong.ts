@@ -2,13 +2,25 @@ import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import { RACKET_HEIGHT, RACKET_SPEED, RACKET_WIDTH, SPACE_SIDES } from '@/components/data/PongData';
 
-type Coords = { x: number, y: number}
+export type Coords = { x: number, y: number}
 export type PlayerKeyType = null | undefined | "ArrowUp" | "ArrowDown"
 
 export const usePongStore = defineStore('pong', () => {
-	const playerCoords = ref({ x: SPACE_SIDES, y: 0 });
-	const enemyCoords = ref({ x: window.innerWidth - (RACKET_WIDTH + SPACE_SIDES), y: 0 });
+	const playerCoords = ref<Coords>({ x: SPACE_SIDES, y: 0 });
+	const enemyCoords = ref<Coords>({ x: window.innerWidth - (RACKET_WIDTH + SPACE_SIDES), y: 0 });
+	const ballCoords = ref<Coords>({ x: window.innerWidth / 2, y: window.innerHeight / 2});
+
 	const playerKey = ref<PlayerKeyType>();
+	const boundaries = ref({left: 0, top: 0, right: window.innerWidth, bottom: window.innerHeight});
+
+	const updateBoundaries = () => {
+		boundaries.value = {
+			left: 0,
+			top: 0,
+			right: window.innerWidth,
+			bottom: window.innerHeight
+		};
+	};
 
 	const setPlayerKey = (key: PlayerKeyType) => playerKey.value = key;
 
@@ -35,6 +47,15 @@ export const usePongStore = defineStore('pong', () => {
 		}
 	};
 
+	const moveBall = () => {
+
+	};
+
+	const play = () => {
+		movePlayer();
+		updateBoundaries();
+	};
+
 	const moveDown = (type: 'player' | 'enemy') => {
 
 		if (type === 'player' && playerCoords.value.y + RACKET_HEIGHT < window.innerHeight ) {
@@ -53,5 +74,5 @@ export const usePongStore = defineStore('pong', () => {
 	};
 
 
-	return { playerCoords, enemyCoords, setPlayerCoords, setEnemyCoords, playerKey, setPlayerKey, movePlayer };
+	return { playerCoords, enemyCoords, setPlayerCoords, setEnemyCoords, playerKey, setPlayerKey, play, ballCoords };
 });

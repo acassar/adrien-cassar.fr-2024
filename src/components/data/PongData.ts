@@ -1,6 +1,7 @@
-const RACKET_WIDTH = 10;
-const RACKET_HEIGHT = 60;
-const SPACE_SIDES = 10;
+const RACKET_WIDTH = 10; //in px
+const RACKET_HEIGHT = 60; //in px
+const SPACE_SIDES = 10; //in px
 const RACKET_SPEED = 2; //in px
+const BALL_SIZE = 10; //in px
 
-export {RACKET_WIDTH, RACKET_HEIGHT, SPACE_SIDES, RACKET_SPEED};
+export {RACKET_WIDTH, RACKET_HEIGHT, SPACE_SIDES, RACKET_SPEED, BALL_SIZE};

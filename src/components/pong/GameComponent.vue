@@ -3,16 +3,17 @@ import { usePongStore, type PlayerKeyType } from '@/stores/pong';
 import RacketComponent from './RacketComponent.vue';
 import { storeToRefs } from 'pinia';
 import { onMounted, onUnmounted, ref } from 'vue';
+import BallComponent from './BallComponent.vue';
 
 const pongStore = usePongStore();
 
-const { playerCoords, enemyCoords } = storeToRefs(pongStore);
-const { setPlayerKey, movePlayer } = pongStore;
+const { playerCoords, enemyCoords, ballCoords } = storeToRefs(pongStore);
+const { setPlayerKey, play } = pongStore;
 const pressingDown = ref<Set<string>>(new Set());
 
 onMounted(() => {
 	setInterval(() => {
-		movePlayer();
+		play();
 	}, 1);
 });
 
@@ -55,6 +56,7 @@ onUnmounted(() => {
       :coords="enemyCoords"
       type="enemy"
     />
+    <BallComponent :coords="ballCoords" />
   </div>
 </template>
 

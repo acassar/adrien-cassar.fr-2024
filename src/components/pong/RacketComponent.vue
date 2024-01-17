@@ -1,9 +1,10 @@
 <script setup lang="ts">
+import type { Coords } from '@/stores/pong';
 import { RACKET_HEIGHT, RACKET_WIDTH } from '../data/PongData';
 
 defineProps<{
 	type : 'player ' | 'enemy'
-	coords: {x: number, y: number}
+	coords: Coords
 }>();
 </script>
 
