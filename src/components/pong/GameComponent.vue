@@ -72,12 +72,14 @@ onUnmounted(() => {
     {{ counter }}
   </h1>
 
-  <ButtonComponent
-    :visible="unlockedResume"
-    class="cv"
-  >
-    {{ $t("download_cv") }}
-  </ButtonComponent>
+  <a href="documents/cv.pdf">
+    <ButtonComponent
+      :visible="unlockedResume"
+      class="cv"
+    >
+      {{ $t("download_cv") }}
+    </ButtonComponent>
+  </a>
 
   <ModalComponent v-if="!start">
     <template #default>
