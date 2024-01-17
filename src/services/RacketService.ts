@@ -27,6 +27,6 @@ export const moveUp = (type: 'player' | 'enemy') => {
 	if (type === 'player' && playerCoords.y > 0) {
 		setPlayerCoords({ x: playerCoords.x, y: playerCoords.y - RACKET_SPEED });
 	} else if (type === 'enemy' && enemyCoords.y > 0) {
-		setEnemyCoords({ x: enemyCoords.x, y: enemyCoords.y - RACKET_SPEED });
+		setEnemyCoords({ x: enemyCoords.x, y: enemyCoords.y - RACKET_SPEED});
 	}
 };

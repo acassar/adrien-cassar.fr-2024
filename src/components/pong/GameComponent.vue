@@ -7,7 +7,7 @@ import BallComponent from './BallComponent.vue';
 
 const pongStore = usePongStore();
 
-const { playerCoords, enemyCoords, ballCoords } = storeToRefs(pongStore);
+const { playerCoords, enemyCoords, ballCoords, } = storeToRefs(pongStore);
 const { setPlayerKey, play } = pongStore;
 const pressingDown = ref<Set<string>>(new Set());
 

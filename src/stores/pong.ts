@@ -1,6 +1,6 @@
 import { computed, ref } from 'vue';
 import { defineStore } from 'pinia';
-import { BALL_SPEED, RACKET_WIDTH, SPACE_SIDES } from '@/components/data/PongData';
+import { BALL_SPEED, RACKET_HEIGHT, RACKET_WIDTH, SPACE_SIDES } from '@/components/data/PongData';
 import { newCoordsInScreenBoundaries } from '@/services/BoundariesService';
 import { moveDown, moveUp } from '@/services/RacketService';
 import { moveBall } from '@/services/BallService';
@@ -56,15 +56,22 @@ export const usePongStore = defineStore('pong', () => {
 			switch (playerKey.value) {
 				case "ArrowUp":
 					moveUp("player");
-					moveUp("enemy");
 					break;
 				case "ArrowDown":
 					moveDown("player");
-					moveDown("enemy");
 					break;
 				default:
 					break;
 			}
+		}
+	};
+
+	const moveEnemy = () => {
+		const diff = Math.random() * RACKET_HEIGHT / 2;
+		if (enemyCoords.value.y + RACKET_HEIGHT / 2 + diff > ballCoords.value.y) {
+			moveUp("enemy");
+		} else if (enemyCoords.value.y + RACKET_HEIGHT / 2 + diff < ballCoords.value.y) {
+			moveDown("enemy");
 		}
 	};
 
@@ -78,6 +85,7 @@ export const usePongStore = defineStore('pong', () => {
 	 */
 	const play = () => {
 		movePlayer();
+		moveEnemy();
 		updateBoundaries();
 		moveBall();
 	};
