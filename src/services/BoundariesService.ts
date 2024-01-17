@@ -12,7 +12,7 @@ import { usePongStore, type Coords } from "@/stores/pong";
 	 * @returns an object of type Coords, which has properties x and y.
 	 */
 export const newCoordsInScreenBoundaries = (actualCoords: Coords, dirCoords: Coords): Coords => {
-	const {setBallDir, dirXWithSpeed, dirYWithSpeed, boundaries} = usePongStore();
+	const {setBallDir, dirXWithSpeed, dirYWithSpeed, boundaries, setEnd} = usePongStore();
 	let newX = actualCoords.x + dirXWithSpeed;
 	let newY = actualCoords.y + dirYWithSpeed;
 	/* This code block is checking if the new x-coordinate of the ball is outside the left or right
@@ -22,7 +22,7 @@ export const newCoordsInScreenBoundaries = (actualCoords: Coords, dirCoords: Coo
     make the ball bounce off the wall and continue moving in the opposite x-direction. */
 	if (newX < boundaries.left || newX > boundaries.right) {
 		setBallDir({x: 0, y: 0});
-		// setBallDir({x: -dirCoords.x, y: dirCoords.y});
+		setEnd(true);
 	}
 	/* This code block is checking if the new y-coordinate of the ball is outside the top or bottom
     boundaries. If it is, it means that the ball has hit the top or bottom wall of the game area. In

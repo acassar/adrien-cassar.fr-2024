@@ -18,18 +18,14 @@ export const usePongStore = defineStore('pong', () => {
 	const playerKey = ref<PlayerKeyType>();
 	const boundaries = ref({left: 0, top: 0, right: window.innerWidth, bottom: window.innerHeight});
 
+	const end = ref(false);
 
-	/**
-	 * The function `updateBoundaries` updates the boundaries object with the current window dimensions.
-	 */
-	const updateBoundaries = () => {
-		boundaries.value = {
-			left: 0,
-			top: 0,
-			right: window.innerWidth,
-			bottom: window.innerHeight
-		};
-	};
+	/* Getters */
+
+	const dirXWithSpeed = computed(() => ballDir.value.x * BALL_SPEED);
+	const dirYWithSpeed = computed(() => ballDir.value.y * BALL_SPEED);
+
+	/* Setters */
 
 	const setPlayerKey = (key: PlayerKeyType) => playerKey.value = key;
 
@@ -47,6 +43,25 @@ export const usePongStore = defineStore('pong', () => {
 
 	const setBallCoords = (coords: Coords) => {
 		ballCoords.value = coords;
+	};
+
+	const setEnd = (_end: boolean) => {
+		end.value = _end;
+	};
+
+
+	/* Methods */
+
+	/**
+	 * The function `updateBoundaries` updates the boundaries object with the current window dimensions.
+	 */
+	const updateBoundaries = () => {
+		boundaries.value = {
+			left: 0,
+			top: 0,
+			right: window.innerWidth,
+			bottom: window.innerHeight
+		};
 	};
 
 	/**
@@ -77,9 +92,6 @@ export const usePongStore = defineStore('pong', () => {
 		}
 	};
 
-	const dirXWithSpeed = computed(() => ballDir.value.x * BALL_SPEED);
-	const dirYWithSpeed = computed(() => ballDir.value.y * BALL_SPEED);
-
 
 	/**
 	 * The function "play" executes a series of actions including moving the player, updating boundaries,
@@ -95,5 +107,23 @@ export const usePongStore = defineStore('pong', () => {
 
 
 
-	return { playerCoords, enemyCoords, setPlayerCoords, setEnemyCoords, playerKey, setPlayerKey, play, ballCoords, dirXWithSpeed, dirYWithSpeed, boundaries, ballDir, setBallDir, newCoordsInBoundaries: newCoordsInScreenBoundaries, setBallCoords };
+	return {
+		playerCoords,
+		enemyCoords,
+		setPlayerCoords,
+		setEnemyCoords,
+		playerKey,
+		setPlayerKey,
+		play,
+		ballCoords,
+		dirXWithSpeed,
+		dirYWithSpeed,
+		boundaries,
+		ballDir,
+		setBallDir,
+		newCoordsInBoundaries: newCoordsInScreenBoundaries,
+		setBallCoords,
+		end,
+		setEnd
+	};
 });
