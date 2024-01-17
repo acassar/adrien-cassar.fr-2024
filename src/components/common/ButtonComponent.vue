@@ -1,9 +1,15 @@
 <script setup lang="ts">
 const emit = defineEmits(['click']);
+defineProps({
+	visible: {
+		type: Boolean,
+		default: true
+	}
+});
 </script>
 
 <template>
-  <div>
+  <div :style="`display: ${visible ? 'block' : 'none'}`">
     <button @click="() => emit('click')">
       <slot />
     </button>

@@ -52,12 +52,13 @@ export const newCoordsInScreenBoundaries = (actualCoords: Coords, dirCoords: Coo
  * collisions.
  */
 export const handleRacketCollisions = (racketCoords: Coords, ballCords: Coords, ballDirCoords: Coords): Coords => {
-	const {dirXWithSpeed, dirYWithSpeed, setBallDir} = usePongStore();
+	const {incrementTouchCounter, dirXWithSpeed, dirYWithSpeed, setBallDir} = usePongStore();
 	let newX = ballCords.x + dirXWithSpeed;
 	let newY = ballCords.y + dirYWithSpeed;
 
 	if (newX > racketCoords.x && newX < racketCoords.x + RACKET_WIDTH && newY > racketCoords.y && newY < racketCoords.y + RACKET_HEIGHT) {
 		setBallDir({x: -ballDirCoords.x, y: changeYMovement({x: newX, y: newY}, racketCoords)});
+		incrementTouchCounter();
 	}
 
 	newX = ballCords.x + dirXWithSpeed;

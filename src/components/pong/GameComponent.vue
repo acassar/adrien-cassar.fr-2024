@@ -2,18 +2,20 @@
 import { usePongStore, type PlayerKeyType } from '@/stores/pong';
 import RacketComponent from './RacketComponent.vue';
 import { storeToRefs } from 'pinia';
-import { onUnmounted, ref } from 'vue';
+import { onUnmounted, ref, computed } from 'vue';
 import BallComponent from './BallComponent.vue';
 import ModalComponent from '@/components/common/ModalComponent.vue';
 import ButtonComponent from '../common/ButtonComponent.vue';
 
 const pongStore = usePongStore();
 
-const { playerCoords, enemyCoords, ballCoords, end} = storeToRefs(pongStore);
+const { playerCoords, enemyCoords, ballCoords, end, touchCounter} = storeToRefs(pongStore);
 const { setPlayerKey, play } = pongStore;
 const pressingDown = ref<Set<string>>(new Set());
 const start = ref(false);
 const counter = ref(0);
+
+const unlockedResume = computed(() => touchCounter.value >= 15);
 
 const startGame = () => {
 	counter.value = 3;
@@ -70,7 +72,10 @@ onUnmounted(() => {
     {{ counter }}
   </h1>
 
-  <ButtonComponent class="cv">
+  <ButtonComponent
+    :visible="unlockedResume"
+    class="cv"
+  >
     {{ $t("download_cv") }}
   </ButtonComponent>
 

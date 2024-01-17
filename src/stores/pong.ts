@@ -14,6 +14,7 @@ export const usePongStore = defineStore('pong', () => {
 	const enemyCoords = ref<Coords>({ x: window.innerWidth - (RACKET_WIDTH + SPACE_SIDES), y: window.innerHeight / 2 });
 	const ballCoords = ref<Coords>({ x: window.innerWidth / 2, y: window.innerHeight / 2});
 	const ballDir = ref<Coords>({ x: Math.floor(Math.random()) * 2 - 1, y: Math.random() * 2 - 1 });
+	const touchCounter = ref(0);
 
 	const playerKey = ref<PlayerKeyType>();
 	const boundaries = ref({left: 0, top: 0, right: window.innerWidth, bottom: window.innerHeight});
@@ -26,6 +27,8 @@ export const usePongStore = defineStore('pong', () => {
 	const dirYWithSpeed = computed(() => ballDir.value.y * BALL_SPEED);
 
 	/* Setters */
+
+	const incrementTouchCounter = (() => touchCounter.value++);
 
 	const setPlayerKey = (key: PlayerKeyType) => playerKey.value = key;
 
@@ -124,6 +127,8 @@ export const usePongStore = defineStore('pong', () => {
 		newCoordsInBoundaries: newCoordsInScreenBoundaries,
 		setBallCoords,
 		end,
-		setEnd
+		setEnd,
+		incrementTouchCounter,
+		touchCounter
 	};
 });
