@@ -1,6 +1,9 @@
 import { computed, ref } from 'vue';
 import { defineStore } from 'pinia';
-import { BALL_SPEED, RACKET_HEIGHT, RACKET_SPEED, RACKET_WIDTH, SPACE_SIDES } from '@/components/data/PongData';
+import { BALL_SPEED, RACKET_WIDTH, SPACE_SIDES } from '@/components/data/PongData';
+import { newCoordsInBoundaries } from '@/services/BoundariesService';
+import { moveDown, moveUp } from '@/services/RacketService';
+import { moveBall } from '@/services/BallService';
 
 export type Coords = { x: number, y: number}
 export type PlayerKeyType = null | undefined | "ArrowUp" | "ArrowDown"
@@ -36,6 +39,14 @@ export const usePongStore = defineStore('pong', () => {
 		enemyCoords.value = coords;
 	};
 
+	const setBallDir = (_ballDir: Coords) => {
+		ballDir.value = _ballDir;
+	};
+
+	const setBallCoords = (coords: Coords) => {
+		ballCoords.value = coords;
+	};
+
 	/**
 	 * The function `movePlayer` checks the value of `playerKey` and calls the appropriate function to
 	 * move the player up or down based on the arrow key pressed.
@@ -58,45 +69,6 @@ export const usePongStore = defineStore('pong', () => {
 	const dirXWithSpeed = computed(() => ballDir.value.x * BALL_SPEED);
 	const dirYWithSpeed = computed(() => ballDir.value.y * BALL_SPEED);
 
-	/**
-	 * The function `newCoordsInBoundaries` calculates new coordinates for a ball within specified
-	 * boundaries, taking into account the direction of the ball.
-	 * @param {Coords} actualCoords - The actualCoords parameter represents the current coordinates of an
-	 * object. It is an object with properties x and y, representing the x and y coordinates respectively.
-	 * @param {Coords} dirCoords - The `dirCoords` parameter represents the direction in which the
-	 * coordinates should be moved. It is an object with `x` and `y` properties, indicating the amount of
-	 * movement in the horizontal and vertical directions respectively.
-	 * @returns an object of type Coords, which has properties x and y.
-	 */
-	const newCoordsInBoundaries = (actualCoords: Coords, dirCoords: Coords): Coords => {
-		const newX = actualCoords.x + dirXWithSpeed.value;
-		const newY = actualCoords.y + dirYWithSpeed.value;
-		/* This code block is checking if the new x-coordinate of the ball is outside the left or right
-		boundaries. If it is, it means that the ball has hit the left or right wall of the game area. In
-		this case, the code updates the ball's direction by reversing the x-component of the direction
-		vector (ballDir.x) and keeping the y-component (ballDir.y) the same. This change in direction will
-		make the ball bounce off the wall and continue moving in the opposite x-direction. */
-		if (newX < boundaries.value.left || newX > boundaries.value.right) {
-			ballDir.value = {x: -dirCoords.x, y: dirCoords.y};
-		}
-		/* This code block is checking if the new y-coordinate of the ball is outside the top or bottom
-		boundaries. If it is, it means that the ball has hit the top or bottom wall of the game area. In
-		this case, the code updates the ball's direction by reversing the y-component of the direction
-		vector (ballDir.y) and keeping the x-component (ballDir.x) the same. This change in direction will
-		make the ball bounce off the wall and continue moving in the opposite y-direction. */
-		if (newY > boundaries.value.bottom || newY < boundaries.value.top) {
-			ballDir.value = {x: dirCoords.x, y: -dirCoords.y};
-		}
-
-		return {x: actualCoords.x + (dirCoords.x * BALL_SPEED), y: actualCoords.y + (dirCoords.y * BALL_SPEED)};
-	};
-
-	/**
-	 * The moveBall function updates the coordinates of a ball within specified boundaries.
-	 */
-	const moveBall = () => {
-		ballCoords.value = newCoordsInBoundaries(ballCoords.value, ballDir.value);
-	};
 
 	/**
 	 * The function "play" executes a series of actions including moving the player, updating boundaries,
@@ -108,35 +80,8 @@ export const usePongStore = defineStore('pong', () => {
 		moveBall();
 	};
 
-	/**
-	 * The function `moveDown` moves either the player or the enemy down based on their type.
-	 * @param {'player' | 'enemy'} type - The `type` parameter is a string that can have two possible
-	 * values: 'player' or 'enemy'. It is used to determine whether the function should move the player or
-	 * the enemy.
-	 */
-	const moveDown = (type: 'player' | 'enemy') => {
-
-		if (type === 'player' && playerCoords.value.y + RACKET_HEIGHT < window.innerHeight ) {
-			setPlayerCoords({ x: playerCoords.value.x, y: playerCoords.value.y + RACKET_SPEED });
-		} else if (type === 'enemy') {
-			setEnemyCoords({ x: enemyCoords.value.x, y: enemyCoords.value.y + RACKET_SPEED });
-		}
-	};
-
-	/**
-	 * The function `moveUp` moves either the player or the enemy up by a certain speed.
-	 * @param {'player' | 'enemy'} type - The `type` parameter is a string that can have two possible
-	 * values: 'player' or 'enemy'. It is used to determine whether the function should move the player or
-	 * the enemy.
-	 */
-	const moveUp = (type: 'player' | 'enemy') => {
-		if (type === 'player' && playerCoords.value.y > 0) {
-			setPlayerCoords({ x: playerCoords.value.x, y: playerCoords.value.y - RACKET_SPEED });
-		} else if (type === 'enemy') {
-			setEnemyCoords({ x: enemyCoords.value.x, y: enemyCoords.value.y - RACKET_SPEED });
-		}
-	};
 
 
-	return { playerCoords, enemyCoords, setPlayerCoords, setEnemyCoords, playerKey, setPlayerKey, play, ballCoords };
+
+	return { playerCoords, enemyCoords, setPlayerCoords, setEnemyCoords, playerKey, setPlayerKey, play, ballCoords, dirXWithSpeed, dirYWithSpeed, boundaries, ballDir, setBallDir, newCoordsInBoundaries, setBallCoords };
 });
