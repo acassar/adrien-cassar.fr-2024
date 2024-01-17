@@ -1,6 +1,6 @@
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { defineStore } from 'pinia';
-import { RACKET_HEIGHT, RACKET_SPEED, RACKET_WIDTH, SPACE_SIDES } from '@/components/data/PongData';
+import { BALL_SPEED, RACKET_HEIGHT, RACKET_SPEED, RACKET_WIDTH, SPACE_SIDES } from '@/components/data/PongData';
 
 export type Coords = { x: number, y: number}
 export type PlayerKeyType = null | undefined | "ArrowUp" | "ArrowDown"
@@ -9,6 +9,7 @@ export const usePongStore = defineStore('pong', () => {
 	const playerCoords = ref<Coords>({ x: SPACE_SIDES, y: 0 });
 	const enemyCoords = ref<Coords>({ x: window.innerWidth - (RACKET_WIDTH + SPACE_SIDES), y: 0 });
 	const ballCoords = ref<Coords>({ x: window.innerWidth / 2, y: window.innerHeight / 2});
+	const ballDir = ref<Coords>({ x: -1, y: -0.4 });
 
 	const playerKey = ref<PlayerKeyType>();
 	const boundaries = ref({left: 0, top: 0, right: window.innerWidth, bottom: window.innerHeight});
@@ -47,13 +48,50 @@ export const usePongStore = defineStore('pong', () => {
 		}
 	};
 
-	const moveBall = () => {
+	const dirXWithSpeed = computed(() => ballDir.value.x * BALL_SPEED);
+	const dirYWithSpeed = computed(() => ballDir.value.y * BALL_SPEED);
 
+	/**
+	 * The function `newCoordsInBoundaries` calculates new coordinates for a ball within specified
+	 * boundaries, taking into account the direction of the ball.
+	 * @param {Coords} actualCoords - The actualCoords parameter represents the current coordinates of an
+	 * object. It is an object with properties x and y, representing the x and y coordinates respectively.
+	 * @param {Coords} dirCoords - The `dirCoords` parameter represents the direction in which the
+	 * coordinates should be moved. It is an object with `x` and `y` properties, indicating the amount of
+	 * movement in the horizontal and vertical directions respectively.
+	 * @returns an object of type Coords, which has properties x and y.
+	 */
+	const newCoordsInBoundaries = (actualCoords: Coords, dirCoords: Coords): Coords => {
+		const newX = actualCoords.x + dirXWithSpeed.value;
+		const newY = actualCoords.y + dirYWithSpeed.value;
+		/* This code block is checking if the new x-coordinate of the ball is outside the left or right
+		boundaries. If it is, it means that the ball has hit the left or right wall of the game area. In
+		this case, the code updates the ball's direction by reversing the x-component of the direction
+		vector (ballDir.x) and keeping the y-component (ballDir.y) the same. This change in direction will
+		make the ball bounce off the wall and continue moving in the opposite x-direction. */
+		if (newX < boundaries.value.left || newX > boundaries.value.right) {
+			ballDir.value = {x: -dirCoords.x, y: dirCoords.y};
+		}
+		/* This code block is checking if the new y-coordinate of the ball is outside the top or bottom
+		boundaries. If it is, it means that the ball has hit the top or bottom wall of the game area. In
+		this case, the code updates the ball's direction by reversing the y-component of the direction
+		vector (ballDir.y) and keeping the x-component (ballDir.x) the same. This change in direction will
+		make the ball bounce off the wall and continue moving in the opposite y-direction. */
+		if (newY > boundaries.value.bottom || newY < boundaries.value.top) {
+			ballDir.value = {x: dirCoords.x, y: -dirCoords.y};
+		}
+
+		return {x: actualCoords.x + (dirCoords.x * BALL_SPEED), y: actualCoords.y + (dirCoords.y * BALL_SPEED)};
+	};
+
+	const moveBall = () => {
+		ballCoords.value = newCoordsInBoundaries(ballCoords.value, ballDir.value);
 	};
 
 	const play = () => {
 		movePlayer();
 		updateBoundaries();
+		moveBall();
 	};
 
 	const moveDown = (type: 'player' | 'enemy') => {
