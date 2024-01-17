@@ -5,7 +5,7 @@ const emit = defineEmits(['click']);
 <template>
   <div>
     <button @click="() => emit('click')">
-      {{ $t("pong.understood") }}
+      <slot />
     </button>
   </div>
 </template>

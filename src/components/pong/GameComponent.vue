@@ -2,7 +2,7 @@
 import { usePongStore, type PlayerKeyType } from '@/stores/pong';
 import RacketComponent from './RacketComponent.vue';
 import { storeToRefs } from 'pinia';
-import { onMounted, onUnmounted, ref } from 'vue';
+import { onUnmounted, ref } from 'vue';
 import BallComponent from './BallComponent.vue';
 import ModalComponent from '@/components/common/ModalComponent.vue';
 import ButtonComponent from '../common/ButtonComponent.vue';
@@ -70,6 +70,10 @@ onUnmounted(() => {
     {{ counter }}
   </h1>
 
+  <ButtonComponent class="cv">
+    {{ $t("download_cv") }}
+  </ButtonComponent>
+
   <ModalComponent v-if="!start">
     <template #default>
       <h2 class="title">
@@ -85,7 +89,9 @@ onUnmounted(() => {
           <span>{{ $t("pong.arrow_down") }}</span>
         </div>
         <div class="d-flex justify-center button">
-          <ButtonComponent @click="startGame" />
+          <ButtonComponent @click="startGame">
+            {{ $t("pong.understood") }}
+          </ButtonComponent>
         </div>
       </div>
     </template>
@@ -104,6 +110,12 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
+.cv {
+	left: 50%;
+	top: 5%;
+	position: fixed;
+    transform: translate(-50%, -50%);
+}
 .counter {
 	left: 50%;
 	top: 40%;
