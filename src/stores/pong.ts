@@ -3,7 +3,7 @@ import { defineStore } from 'pinia';
 import { RACKET_HEIGHT, RACKET_SPEED, RACKET_WIDTH, SPACE_SIDES } from '@/components/data/PongData';
 
 type Coords = { x: number, y: number}
-type PlayerKeyType = null | undefined | "ArrowUp" | "ArrowDown"
+export type PlayerKeyType = null | undefined | "ArrowUp" | "ArrowDown"
 
 export const usePongStore = defineStore('pong', () => {
 	const playerCoords = ref({ x: SPACE_SIDES, y: 0 });

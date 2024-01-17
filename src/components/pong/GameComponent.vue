@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { usePongStore } from '@/stores/pong';
+import { usePongStore, type PlayerKeyType } from '@/stores/pong';
 import RacketComponent from './RacketComponent.vue';
 import { storeToRefs } from 'pinia';
-import { onMounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 
 const pongStore = usePongStore();
 
@@ -16,17 +16,30 @@ onMounted(() => {
 	}, 1);
 });
 
-document.addEventListener('keydown', (e) => {
+const keyUpEvent = (e: KeyboardEvent) => {
+	pressingDown.value.delete(e.key);
+	const values = Array.from(pressingDown.value);
+	if (pressingDown.value.size === 0)
+		setPlayerKey(null);
+	else {
+		if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+			setPlayerKey(values[values.length - 1] as PlayerKeyType);
+		}
+	}
+};
+const keyDownEvent = (e: KeyboardEvent) => {
 	pressingDown.value.add(e.key);
 
 	if (e.key === "ArrowDown" || e.key === "ArrowUp")
 		setPlayerKey(e.key);
-});
+};
 
-document.addEventListener('keyup', (e) => {
-	pressingDown.value.delete(e.key);
-	if (pressingDown.value.size === 0)
-		setPlayerKey(null);
+document.addEventListener('keydown', keyDownEvent);
+document.addEventListener('keyup', keyUpEvent);
+
+onUnmounted(() => {
+	document.removeEventListener("keydown", keyDownEvent);
+	document.removeEventListener("keyup", keyUpEvent);
 
 });
 
