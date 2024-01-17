@@ -16,6 +16,7 @@ button {
     min-width: 100px;
     background-color: var(--primary);
     text-decoration: none;
+    font-size: 16px;
 }
 
 button:hover {
