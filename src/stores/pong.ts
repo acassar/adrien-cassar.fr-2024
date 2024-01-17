@@ -1,7 +1,7 @@
 import { computed, ref } from 'vue';
 import { defineStore } from 'pinia';
 import { BALL_SPEED, RACKET_WIDTH, SPACE_SIDES } from '@/components/data/PongData';
-import { newCoordsInBoundaries } from '@/services/BoundariesService';
+import { newCoordsInScreenBoundaries } from '@/services/BoundariesService';
 import { moveDown, moveUp } from '@/services/RacketService';
 import { moveBall } from '@/services/BallService';
 
@@ -83,5 +83,5 @@ export const usePongStore = defineStore('pong', () => {
 
 
 
-	return { playerCoords, enemyCoords, setPlayerCoords, setEnemyCoords, playerKey, setPlayerKey, play, ballCoords, dirXWithSpeed, dirYWithSpeed, boundaries, ballDir, setBallDir, newCoordsInBoundaries, setBallCoords };
+	return { playerCoords, enemyCoords, setPlayerCoords, setEnemyCoords, playerKey, setPlayerKey, play, ballCoords, dirXWithSpeed, dirYWithSpeed, boundaries, ballDir, setBallDir, newCoordsInBoundaries: newCoordsInScreenBoundaries, setBallCoords };
 });
