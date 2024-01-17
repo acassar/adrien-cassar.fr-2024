@@ -4,6 +4,7 @@ import RacketComponent from './RacketComponent.vue';
 import { storeToRefs } from 'pinia';
 import { onMounted, onUnmounted, ref } from 'vue';
 import BallComponent from './BallComponent.vue';
+import ModalComponent from '@/components/common/ModalComponent.vue';
 
 const pongStore = usePongStore();
 
@@ -48,6 +49,11 @@ onUnmounted(() => {
 </script>
 
 <template>
+  <ModalComponent>
+    <template #default>
+      <h2>{{ $t("title") }}</h2>
+    </template>
+  </ModalComponent>
   <div class="container">
     <RacketComponent
       :coords="playerCoords"

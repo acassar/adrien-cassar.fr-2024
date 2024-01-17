@@ -7,8 +7,8 @@ import { createI18n } from 'vue-i18n';
 import App from './App.vue';
 import router from './router';
 
-import fr from './assets/i18n/fr';
-import en from './assets/i18n/en';
+import fr from './assets/i18n/fr.json';
+import en from './assets/i18n/en.json';
 
 const messages = {
 	en: en,

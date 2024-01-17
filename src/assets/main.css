@@ -1,2 +1,20 @@
 @import './base.css';
 
+.d-flex {
+    display: flex;
+}
+
+.align-center {
+    align-items: center;
+    align-content: center;
+}
+
+.justify-center {
+    justify-content: center;
+    justify-items: center;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
