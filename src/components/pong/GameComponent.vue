@@ -15,7 +15,7 @@ const pressingDown = ref<Set<string>>(new Set());
 const start = ref(false);
 const counter = ref(0);
 
-const unlockedResume = computed(() => touchCounter.value >= 15);
+const unlockedResume = computed(() => touchCounter.value >= 15 || end.value);
 
 const startGame = () => {
 	counter.value = 3;
@@ -84,20 +84,30 @@ onUnmounted(() => {
       <h2 class="title">
         {{ $t("title") }}
       </h2>
-      <div class="flex-column">
-        <div class="d-flex align-center">
-          <span class="icon">⬆️</span>
-          <span>{{ $t("pong.arrow_up") }}</span>
+      <div class="d-flex row">
+        <div class="flex-column">
+          <div class="d-flex align-center">
+            <span class="icon">⬆️</span>
+            <span>{{ $t("pong.arrow_up") }}</span>
+          </div>
+          <div class="d-flex align-center">
+            <span class="icon">⬇️</span>
+            <span>{{ $t("pong.arrow_down") }}</span>
+          </div>
         </div>
-        <div class="d-flex align-center">
-          <span class="icon">⬇️</span>
-          <span>{{ $t("pong.arrow_down") }}</span>
+        <div class="separator" />
+        <div>
+          <div class="text-container d-flex flex-column">
+            <span class="text">{{ $t("pong.play_to_unlock_cv") }}</span>
+            <br>
+            <span class="text">{{ $t("pong.other_way_to_unlock") }}</span>
+          </div>
         </div>
-        <div class="d-flex justify-center button">
-          <ButtonComponent @click="startGame">
-            {{ $t("pong.understood") }}
-          </ButtonComponent>
-        </div>
+      </div>
+      <div class="d-flex justify-center button">
+        <ButtonComponent @click="startGame">
+          {{ $t("pong.understood") }}
+        </ButtonComponent>
       </div>
     </template>
   </ModalComponent>
@@ -115,6 +125,17 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
+.separator {
+  background-color: var(--color-background);
+  width: 0.2rem;
+}
+.row {
+  margin-top: 1rem;
+  gap: 2rem;
+}
+.text-container {
+  margin-top: 2rem;
+}
 .cv {
 	left: 50%;
 	top: 5%;

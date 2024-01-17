@@ -2,7 +2,8 @@
 
 :root {
     --primary: #D8BFAA;
-    --primary-hover: #DDCDBB
+    --primary-hover: #DDCDBB;
+    --secondary: white;
 }
 
 .d-flex {
@@ -22,4 +23,8 @@
 .flex-column {
     display: flex;
     flex-direction: column;
+}
+
+.text {
+    font-size: 16px;
 }

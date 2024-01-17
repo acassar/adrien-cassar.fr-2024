@@ -1,16 +1,24 @@
 <script setup lang="ts">
+import { computed } from 'vue';
+
 const emit = defineEmits(['click']);
-defineProps({
-	visible: {
-		type: Boolean,
-		default: true
-	}
-});
+type ButtonType = 'primary' | 'secondary'
+
+const props = withDefaults(defineProps<{
+	visible: boolean
+	type: ButtonType
+}>(), {type: 'primary', visible: true});
+
+const getTypeClass = computed(() => props.type);
+
 </script>
 
 <template>
   <div :style="`display: ${visible ? 'block' : 'none'}`">
-    <button @click="() => emit('click')">
+    <button
+      :class="`${getTypeClass}`"
+      @click="() => emit('click')"
+    >
       <slot />
     </button>
   </div>
@@ -18,13 +26,22 @@ defineProps({
 
 <style scoped>
 
+.primary {
+    background-color: var(--primary);
+}
+
+.secondary {
+    background-color: var(--secondary);
+}
+
 button {
     padding: 10px 30px 10px 30px ;
     border-radius: 6px;
     min-width: 100px;
-    background-color: var(--primary);
     text-decoration: none;
     font-size: 16px;
+    border: unset;
+    margin: 0.2rem;
 }
 
 button:hover {

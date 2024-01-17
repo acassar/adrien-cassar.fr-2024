@@ -4,6 +4,8 @@
   "pong": {
     "arrow_up": "Raise the Racket",
     "arrow_down": "Lower the Racket",
-    "understood": "Understood"
+    "understood": "Understood",
+    "play_to_unlock_cv": "Make 15 passes to unlock CV",
+    "other_way_to_unlock": "There may be another way (or two) to unlock it 😉"
   }
 }
