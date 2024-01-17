@@ -33,6 +33,10 @@ export const usePongStore = defineStore('pong', () => {
 		enemyCoords.value = coords;
 	};
 
+	/**
+	 * The function `movePlayer` checks the value of `playerKey` and calls the appropriate function to
+	 * move the player up or down based on the arrow key pressed.
+	 */
 	const movePlayer = () => {
 		if (playerKey.value) {
 			switch (playerKey.value) {
@@ -84,16 +88,29 @@ export const usePongStore = defineStore('pong', () => {
 		return {x: actualCoords.x + (dirCoords.x * BALL_SPEED), y: actualCoords.y + (dirCoords.y * BALL_SPEED)};
 	};
 
+	/**
+	 * The moveBall function updates the coordinates of a ball within specified boundaries.
+	 */
 	const moveBall = () => {
 		ballCoords.value = newCoordsInBoundaries(ballCoords.value, ballDir.value);
 	};
 
+	/**
+	 * The function "play" executes a series of actions including moving the player, updating boundaries,
+	 * and moving the ball.
+	 */
 	const play = () => {
 		movePlayer();
 		updateBoundaries();
 		moveBall();
 	};
 
+	/**
+	 * The function `moveDown` moves either the player or the enemy down based on their type.
+	 * @param {'player' | 'enemy'} type - The `type` parameter is a string that can have two possible
+	 * values: 'player' or 'enemy'. It is used to determine whether the function should move the player or
+	 * the enemy.
+	 */
 	const moveDown = (type: 'player' | 'enemy') => {
 
 		if (type === 'player' && playerCoords.value.y + RACKET_HEIGHT < window.innerHeight ) {
@@ -103,6 +120,12 @@ export const usePongStore = defineStore('pong', () => {
 		}
 	};
 
+	/**
+	 * The function `moveUp` moves either the player or the enemy up by a certain speed.
+	 * @param {'player' | 'enemy'} type - The `type` parameter is a string that can have two possible
+	 * values: 'player' or 'enemy'. It is used to determine whether the function should move the player or
+	 * the enemy.
+	 */
 	const moveUp = (type: 'player' | 'enemy') => {
 		if (type === 'player' && playerCoords.value.y > 0) {
 			setPlayerCoords({ x: playerCoords.value.x, y: playerCoords.value.y - RACKET_SPEED });
