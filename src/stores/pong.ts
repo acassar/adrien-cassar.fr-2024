@@ -14,6 +14,9 @@ export const usePongStore = defineStore('pong', () => {
 	const playerKey = ref<PlayerKeyType>();
 	const boundaries = ref({left: 0, top: 0, right: window.innerWidth, bottom: window.innerHeight});
 
+	/**
+	 * The function `updateBoundaries` updates the boundaries object with the current window dimensions.
+	 */
 	const updateBoundaries = () => {
 		boundaries.value = {
 			left: 0,

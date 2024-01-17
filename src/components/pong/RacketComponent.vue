@@ -18,16 +18,14 @@ defineProps<{
 <style scoped>
 .racket {
     position: absolute;
-    /* top: 0px; */
+    border-radius: 20px;
 }
 
 .player {
-    /* left: 1rem; */
-    background-color: rgb(255, 0, 0);
+    background-color: #84DCCF;
 }
 
 .enemy {
-    background-color: rgb(0, 0, 255);
-    /* right: 1rem; */
+    background-color: #EF626C;
 }
 </style>
