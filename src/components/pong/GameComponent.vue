@@ -12,10 +12,17 @@ const pongStore = usePongStore();
 const { playerCoords, enemyCoords, ballCoords, end} = storeToRefs(pongStore);
 const { setPlayerKey, play } = pongStore;
 const pressingDown = ref<Set<string>>(new Set());
+const start = ref(false);
+
+const startGame = () => {
+	console.log("test");
+
+	start.value = true;
+};
 
 onMounted(() => {
 	setInterval(() => {
-		if (!end.value)
+		if (!end.value && start.value)
 			play();
 	}, 1);
 });
@@ -50,7 +57,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <ModalComponent>
+  <ModalComponent v-if="!start">
     <template #default>
       <h2 class="title">
         {{ $t("title") }}
@@ -65,7 +72,7 @@ onUnmounted(() => {
           <span>{{ $t("pong.arrow_down") }}</span>
         </div>
         <div class="d-flex justify-center button">
-          <ButtonComponent />
+          <ButtonComponent @click="startGame" />
         </div>
       </div>
     </template>

@@ -1,10 +1,12 @@
 <script setup lang="ts">
-
+const emit = defineEmits(['click']);
 </script>
 
 <template>
   <div>
-    <button>{{ $t("pong.understood") }}</button>
+    <button @click="() => emit('click')">
+      {{ $t("pong.understood") }}
+    </button>
   </div>
 </template>
 
