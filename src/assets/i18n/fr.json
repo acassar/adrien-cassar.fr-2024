@@ -1,3 +1,8 @@
 {
-  "title": "Comment jouer"
+  "title": "Comment jouer",
+  "pong": {
+    "arrow_up": "Monter la raquette",
+    "arrow_down": "Descendre la raquette",
+    "understood": "Compris"
+  }
 }

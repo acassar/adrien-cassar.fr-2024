@@ -1,5 +1,10 @@
 @import './base.css';
 
+:root {
+    --primary: #D8BFAA;
+    --primary-hover: #DDCDBB
+}
+
 .d-flex {
     display: flex;
 }

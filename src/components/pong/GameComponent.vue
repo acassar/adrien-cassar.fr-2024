@@ -5,6 +5,7 @@ import { storeToRefs } from 'pinia';
 import { onMounted, onUnmounted, ref } from 'vue';
 import BallComponent from './BallComponent.vue';
 import ModalComponent from '@/components/common/ModalComponent.vue';
+import ButtonComponent from '../common/ButtonComponent.vue';
 
 const pongStore = usePongStore();
 
@@ -51,7 +52,22 @@ onUnmounted(() => {
 <template>
   <ModalComponent>
     <template #default>
-      <h2>{{ $t("title") }}</h2>
+      <h2 class="title">
+        {{ $t("title") }}
+      </h2>
+      <div class="flex-column">
+        <div class="d-flex align-center">
+          <span class="icon">⬆️</span>
+          <span>{{ $t("pong.arrow_up") }}</span>
+        </div>
+        <div class="d-flex align-center">
+          <span class="icon">⬇️</span>
+          <span>{{ $t("pong.arrow_down") }}</span>
+        </div>
+        <div class="d-flex justify-center button">
+          <ButtonComponent />
+        </div>
+      </div>
     </template>
   </ModalComponent>
   <div class="container">
@@ -68,6 +84,17 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
+.title {
+	font-size: 2rem;
+    margin-bottom: 1rem;
+}
+.button {
+	margin: 1rem;
+}
+.icon {
+	font-size: 40px;
+	margin: 0.2rem;
+}
 .container {
     width: 100vw;
     height: 100vh;

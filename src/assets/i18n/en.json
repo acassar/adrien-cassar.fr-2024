@@ -1,3 +1,8 @@
 {
-  "title": "How to play"
+  "title": "How to play",
+  "pong": {
+    "arrow_up": "Raise the Racket",
+    "arrow_down": "Lower the Racket",
+    "understood": "Understood"
+  }
 }
