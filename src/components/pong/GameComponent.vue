@@ -16,8 +16,8 @@ const { setPlayerKey, play, reset, setEnd } = pongStore;
 const pressingDown = ref<Set<string>>(new Set());
 const start = ref(false);
 const counter = ref(0);
-const playInterval = ref<number>();
-const counterInterval = ref<number>();
+const playInterval = ref<any>();
+const counterInterval = ref<any>();
 
 const unlockedResume = computed(() => touchCounter.value >= 15 || end.value);
 
