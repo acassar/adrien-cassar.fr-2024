@@ -19,7 +19,7 @@ const counter = ref(0);
 const playInterval = ref<any>();
 const counterInterval = ref<any>();
 
-const unlockedResume = computed(() => touchCounter.value >= 15 || end.value);
+const unlockedResume = computed(() => touchCounter.value >= 15);
 
 const clearPlayInterval = () => {
 	clearInterval(playInterval.value ?? 0);
