@@ -1,6 +1,6 @@
 import { computed, ref } from 'vue';
 import { defineStore } from 'pinia';
-import { BALL_SPEED, RACKET_HEIGHT, RACKET_WIDTH, SPACE_SIDES } from '@/components/data/PongData';
+import { BALL_SPEED, RACKET_HEIGHT, RACKET_WIDTH, SPACE_SIDES, defaultStoreValues } from '@/components/data/PongData';
 import { newCoordsInScreenBoundaries } from '@/services/BoundariesService';
 import { moveDown, moveUp } from '@/services/RacketService';
 import { moveBall } from '@/services/BallService';
@@ -10,16 +10,16 @@ export type PlayerKeyType = null | undefined | "ArrowUp" | "ArrowDown"
 
 
 export const usePongStore = defineStore('pong', () => {
-	const playerCoords = ref<Coords>({ x: SPACE_SIDES, y: window.innerHeight / 2 });
-	const enemyCoords = ref<Coords>({ x: window.innerWidth - (RACKET_WIDTH + SPACE_SIDES), y: window.innerHeight / 2 });
-	const ballCoords = ref<Coords>({ x: window.innerWidth / 2, y: window.innerHeight / 2});
-	const ballDir = ref<Coords>({ x: Math.floor(Math.random()) * 2 - 1, y: Math.random() * 2 - 1 });
-	const touchCounter = ref(0);
+	const playerCoords = ref<Coords>(defaultStoreValues.playerCoords);
+	const enemyCoords = ref<Coords>(defaultStoreValues.enemyCoords);
+	const ballCoords = ref<Coords>(defaultStoreValues.ballCoords);
+	const ballDir = ref<Coords>(defaultStoreValues.ballDir);
+	const touchCounter = ref(defaultStoreValues.touchCounter);
 
-	const playerKey = ref<PlayerKeyType>();
+	const playerKey = ref<PlayerKeyType>(defaultStoreValues.playerKey);
 	const boundaries = ref({left: 0, top: 0, right: window.innerWidth, bottom: window.innerHeight});
 
-	const end = ref(false);
+	const end = ref(defaultStoreValues.end);
 
 	/* Getters */
 
