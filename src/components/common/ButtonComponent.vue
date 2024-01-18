@@ -5,8 +5,8 @@ const emit = defineEmits(['click']);
 type ButtonType = 'primary' | 'secondary'
 
 const props = withDefaults(defineProps<{
-	visible: boolean
-	type: ButtonType
+	visible?: boolean
+	type?: ButtonType
 }>(), {type: 'primary', visible: true});
 
 const getTypeClass = computed(() => props.type);
