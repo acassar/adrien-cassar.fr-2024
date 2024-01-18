@@ -12,28 +12,48 @@ const i18n = useI18n();
 const pongStore = usePongStore();
 
 const { playerCoords, enemyCoords, ballCoords, end, touchCounter} = storeToRefs(pongStore);
-const { setPlayerKey, play } = pongStore;
+const { setPlayerKey, play, reset, setEnd } = pongStore;
 const pressingDown = ref<Set<string>>(new Set());
 const start = ref(false);
 const counter = ref(0);
+const playInterval = ref<number>();
+const counterInterval = ref<number>();
 
 const unlockedResume = computed(() => touchCounter.value >= 15 || end.value);
+
+const clearPlayInterval = () => {
+	clearInterval(playInterval.value ?? 0);
+};
+
+const clearCounterInterval = () => {
+	clearInterval(counterInterval.value ?? 0);
+};
 
 const startGame = () => {
 	counter.value = 3;
 	start.value = true;
-	setInterval(() => {
+	clearPlayInterval();
+	playInterval.value = setInterval(() => {
 		counter.value -= 1;
 		if (counter.value === 0) {
 			initPlay();
+			setEnd(false);
 		}
 	}, 1000);
 };
 
+
+const playAgain = () => {
+	reset();
+	startGame();
+};
+
 const initPlay = () => {
-	setInterval(() => {
+	counterInterval.value = setInterval(() => {
 		if (!end.value && start.value)
 			play();
+		if (end.value)
+			clearCounterInterval();
 	}, 1);
 };
 
@@ -61,7 +81,6 @@ document.addEventListener('keyup', keyUpEvent);
 onUnmounted(() => {
 	document.removeEventListener("keydown", keyDownEvent);
 	document.removeEventListener("keyup", keyUpEvent);
-
 });
 
 const changeLocale = (locale: string) => {
@@ -86,6 +105,14 @@ const changeLocale = (locale: string) => {
       {{ $t("download_cv") }}
     </ButtonComponent>
   </a>
+
+  <ButtonComponent
+    v-if="end"
+    class="play-again"
+    @click="playAgain"
+  >
+    {{ $t("pong.play_again") }}
+  </ButtonComponent>
 
   <ModalComponent v-if="!start">
     <template #default>
@@ -161,9 +188,16 @@ const changeLocale = (locale: string) => {
 }
 .cv {
 	left: 50%;
+	top: 10%;
+	position: fixed;
+  transform: translate(-50%, -50%);
+}
+
+.play-again {
+	left: 50%;
 	top: 5%;
 	position: fixed;
-    transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }
 .counter {
 	left: 50%;

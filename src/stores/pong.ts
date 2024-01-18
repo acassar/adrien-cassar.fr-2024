@@ -107,10 +107,17 @@ export const usePongStore = defineStore('pong', () => {
 		moveBall();
 	};
 
-
+	const reset = () => {
+		setPlayerCoords(defaultStoreValues.playerCoords);
+		setEnemyCoords(defaultStoreValues.enemyCoords);
+		setBallDir(defaultStoreValues.ballDir);
+		setBallCoords(defaultStoreValues.ballCoords);
+	};
 
 
 	return {
+
+		reset,
 		playerCoords,
 		enemyCoords,
 		setPlayerCoords,
