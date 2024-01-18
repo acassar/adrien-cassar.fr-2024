@@ -6,7 +6,9 @@ import { onUnmounted, ref, computed } from 'vue';
 import BallComponent from './BallComponent.vue';
 import ModalComponent from '@/components/common/ModalComponent.vue';
 import ButtonComponent from '../common/ButtonComponent.vue';
+import { useI18n } from 'vue-i18n';
 
+const i18n = useI18n();
 const pongStore = usePongStore();
 
 const { playerCoords, enemyCoords, ballCoords, end, touchCounter} = storeToRefs(pongStore);
@@ -62,6 +64,10 @@ onUnmounted(() => {
 
 });
 
+const changeLocale = (locale: string) => {
+	i18n.locale.value = locale;
+};
+
 </script>
 
 <template>
@@ -86,6 +92,14 @@ onUnmounted(() => {
       <h2 class="title">
         {{ $t("title") }}
       </h2>
+      <div class="d-flex locales">
+        <h3 @click="() => changeLocale('fr')">
+          Français
+        </h3>
+        <h3 @click="() => changeLocale('en')">
+          English
+        </h3>
+      </div>
       <div class="d-flex row">
         <div class="flex-column">
           <div class="d-flex align-center">
@@ -127,6 +141,13 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
+
+.locales {
+  gap: 1rem;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .separator {
   background-color: var(--color-background);
   width: 0.2rem;
