@@ -1,12 +1,14 @@
 import { computed, ref } from 'vue';
 import { defineStore } from 'pinia';
-import { BALL_SPEED, RACKET_HEIGHT, RACKET_WIDTH, SPACE_SIDES, defaultStoreValues } from '@/components/data/PongData';
+import { BALL_SPEED, RACKET_HEIGHT, defaultStoreValues } from '@/components/data/PongData';
 import { newCoordsInScreenBoundaries } from '@/services/BoundariesService';
 import { moveDown, moveUp } from '@/services/RacketService';
 import { moveBall } from '@/services/BallService';
 
 export type Coords = { x: number, y: number}
 export type PlayerKeyType = null | undefined | "ArrowUp" | "ArrowDown"
+
+const getContactPointDiff = () => (Math.random() * 2 - 1) * RACKET_HEIGHT / 2;
 
 
 export const usePongStore = defineStore('pong', () => {
@@ -15,6 +17,8 @@ export const usePongStore = defineStore('pong', () => {
 	const ballCoords = ref<Coords>(defaultStoreValues.ballCoords);
 	const ballDir = ref<Coords>(defaultStoreValues.ballDir);
 	const touchCounter = ref(defaultStoreValues.touchCounter);
+
+	const enemyNextContactPointDiff = ref(getContactPointDiff());
 
 	const playerKey = ref<PlayerKeyType>(defaultStoreValues.playerKey);
 	const boundaries = ref({left: 0, top: 0, right: window.innerWidth, bottom: window.innerHeight});
@@ -27,6 +31,11 @@ export const usePongStore = defineStore('pong', () => {
 	const dirYWithSpeed = computed(() => ballDir.value.y * BALL_SPEED);
 
 	/* Setters */
+
+	const setNewEnemyNextContactPointDiff = () => {
+		enemyNextContactPointDiff.value = getContactPointDiff();
+	};
+
 
 	const incrementTouchCounter = (() => touchCounter.value++);
 
@@ -54,6 +63,7 @@ export const usePongStore = defineStore('pong', () => {
 
 
 	/* Methods */
+
 
 	/**
 	 * The function `updateBoundaries` updates the boundaries object with the current window dimensions.
@@ -87,10 +97,9 @@ export const usePongStore = defineStore('pong', () => {
 	};
 
 	const moveEnemy = () => {
-		const diff = Math.random() * RACKET_HEIGHT / 2;
-		if (enemyCoords.value.y + RACKET_HEIGHT / 2 + diff > ballCoords.value.y) {
+		if (enemyCoords.value.y + RACKET_HEIGHT / 2 + enemyNextContactPointDiff.value > ballCoords.value.y) {
 			moveUp("enemy");
-		} else if (enemyCoords.value.y + RACKET_HEIGHT / 2 + diff < ballCoords.value.y) {
+		} else if (enemyCoords.value.y + RACKET_HEIGHT / 2 + enemyNextContactPointDiff.value < ballCoords.value.y) {
 			moveDown("enemy");
 		}
 	};
@@ -116,7 +125,7 @@ export const usePongStore = defineStore('pong', () => {
 
 
 	return {
-
+		setNewEnemyNextContactPointDiff,
 		reset,
 		playerCoords,
 		enemyCoords,
