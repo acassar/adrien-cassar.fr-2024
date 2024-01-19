@@ -97,7 +97,10 @@ const changeLocale = (locale: string) => {
     {{ counter }}
   </h1>
 
-  <a href="documents/cv.pdf">
+  <a
+    href="documents/cv"
+    target="_blank"
+  >
     <ButtonComponent
       :visible="unlockedResume"
       class="cv"
