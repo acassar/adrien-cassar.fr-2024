@@ -8,5 +8,10 @@
     "play_to_unlock_cv": "Faites 15 passes pour débloquer mon CV",
     "other_way_to_unlock": "Il y a peut être un autre moyen (ou deux) de le débloquer 😉",
     "play_again": "Jouer à nouveau"
+  },
+  "home": {
+    "title": "Bienvenue sur mon site",
+    "description": "Vous pourrez débloquer mon CV en jouant à mes projets personnels",
+    "mobile_warning": "Il semblerait que vous soyez sur mobile. Actuellement, aucun projet n'est compatible sur mobile. Veuillez utiliser un ordinateur pour pouvoir profiter de toute l'expérience"
   }
 }

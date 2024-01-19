@@ -8,5 +8,10 @@
     "play_to_unlock_cv": "Make 15 passes to unlock my resume",
     "other_way_to_unlock": "There may be another way (or two) to unlock it 😉",
     "play_again": "Play again"
+  },
+  "home": {
+    "title": "Welcome to my website",
+    "description": "You will be able to unlock my resume by playing my personal projects",
+    "mobile_warning": "It looks like you are on mobile. Currently, no projects are compatible on mobile. Please use a computer to enjoy the full experience"
   }
 }
