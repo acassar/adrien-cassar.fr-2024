@@ -10,8 +10,9 @@ const defaultStoreValues = {
 	ballCoords: { x: window.innerWidth / 2, y: window.innerHeight / 2},
 	ballDir: { x: Math.floor(Math.random()) * 2 - 1, y: Math.random() * 2 - 1 },
 	touchCounter: 0,
-	playerKey: null,
 	end: false,
 };
 
-export {RACKET_WIDTH, RACKET_HEIGHT, SPACE_SIDES, RACKET_SPEED, BALL_SIZE, BALL_SPEED, defaultStoreValues};
+const allowedKeys = ["ArrowUp", "ArrowDown", "Z", "S", "z", "s"];
+
+export {RACKET_WIDTH, RACKET_HEIGHT, SPACE_SIDES, RACKET_SPEED, BALL_SIZE, BALL_SPEED, defaultStoreValues, allowedKeys};

@@ -7,7 +7,8 @@ import { Racket } from '@/class/pong/racket';
 import { Ball } from '@/class/pong/ball';
 import type { Coords } from '@/class/pong/coords';
 
-export type PlayerKeyType = null | undefined | "ArrowUp" | "ArrowDown"
+export type PlayerKeyType = string
+export type gameModeType = '1 vs computer' | '1 vs 1' | undefined;
 
 const getContactPointDiff = () => (Math.random() * 2 - 1) * RACKET_HEIGHT / 2;
 
@@ -15,13 +16,14 @@ const getContactPointDiff = () => (Math.random() * 2 - 1) * RACKET_HEIGHT / 2;
 export const usePongStore = defineStore('pong', () => {
 	const player1Racket = ref<Racket>(new Racket(defaultStoreValues.player1Coords, 'player'));
 	const player2Racket = ref<Racket>(new Racket(defaultStoreValues.player2Coords, 'computer'));
+	const gameMode = ref<gameModeType>();
 
 	const ball = ref<Ball>(new Ball(defaultStoreValues.ballCoords, defaultStoreValues.ballDir, BALL_SPEED, BALL_SIZE));
 	const touchCounter = ref(defaultStoreValues.touchCounter);
 
 	const enemyNextContactPointDiff = ref(getContactPointDiff());
 
-	const playerKey = ref<PlayerKeyType>(defaultStoreValues.playerKey);
+	const userPressingKeys = ref<PlayerKeyType[]>();
 	const boundaries = ref({left: 0, top: 0, right: window.innerWidth, bottom: window.innerHeight});
 
 	const end = ref(defaultStoreValues.end);
@@ -43,10 +45,13 @@ export const usePongStore = defineStore('pong', () => {
 		enemyNextContactPointDiff.value = getContactPointDiff();
 	};
 
+	const setGameMode = (value: gameModeType) => {
+		gameMode.value = value;
+	};
 
 	const incrementTouchCounter = (() => touchCounter.value++);
 
-	const setPlayerKey = (key: PlayerKeyType) => playerKey.value = key;
+	const setUserKeyPressing = (key: PlayerKeyType[]) => userPressingKeys.value = key;
 
 	const setPlayer1Coords = (coords: Coords) => {
 		player1Racket.value.coords = coords;
@@ -86,21 +91,19 @@ export const usePongStore = defineStore('pong', () => {
 
 
 	/**
- 	* The function `movePlayer` checks the value of `playerKey` and moves the player's racket up or down
- 	* based on the arrow key pressed.
- 	*/
+	 * The function `movePlayer` checks the user's key input and moves the corresponding player's racket up
+	 * or down based on the game mode.
+	 */
 	const movePlayer = () => {
-		if (playerKey.value) {
-			switch (playerKey.value) {
-				case "ArrowUp":
-					player1Racket.value.move("up");
-					break;
-				case "ArrowDown":
-					player1Racket.value.move("down");
-					break;
-				default:
-					break;
-			}
+		if (userPressingKeys.value) {
+			if (userPressingKeys.value.some((key) => ["Z", 'z'].includes(key)) && gameMode.value === '1 vs 1')
+				player2Racket.value.move('up');
+			if (userPressingKeys.value.some((key) => ["S", 's'].includes(key)) && gameMode.value === '1 vs 1')
+				player2Racket.value.move('down');
+			if (userPressingKeys.value.some((key => key === "ArrowUp")))
+				player1Racket.value.move('up');
+			if (userPressingKeys.value.some((key => key === "ArrowDown")))
+				player1Racket.value.move('down');
 		}
 	};
 
@@ -128,7 +131,8 @@ export const usePongStore = defineStore('pong', () => {
 	 */
 	const play = () => {
 		movePlayer();
-		moveComputer();
+		if (gameMode.value === '1 vs computer')
+			moveComputer();
 		updateBoundaries();
 		moveBall();
 	};
@@ -150,8 +154,8 @@ export const usePongStore = defineStore('pong', () => {
 		reset,
 		setPlayer1Coords,
 		setPlayer2Coords,
-		playerKey,
-		setPlayerKey,
+		playerKey: userPressingKeys,
+		setUserKeyPressing,
 		play,
 		ballCoords,
 		ballDir,
@@ -168,5 +172,7 @@ export const usePongStore = defineStore('pong', () => {
 		player1Coords,
 		player2Coords,
 		ball,
+		setGameMode,
+		gameMode
 	};
 });

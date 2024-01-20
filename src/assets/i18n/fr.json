@@ -4,10 +4,11 @@
   "pong": {
     "arrow_up": "Monter la raquette",
     "arrow_down": "Descendre la raquette",
-    "understood": "Compris",
     "play_to_unlock_cv": "Faites 15 passes pour débloquer mon CV",
     "other_way_to_unlock": "Il y a peut être un autre moyen (ou deux) de le débloquer 😉",
-    "play_again": "Jouer à nouveau"
+    "play_again": "Jouer à nouveau",
+    "1_vs_1": "Joueur contre joueur",
+    "1_vs_computer": "Joueur contre un ordinateur"
   },
   "home": {
     "title": "Bienvenue sur mon site",

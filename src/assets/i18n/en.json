@@ -4,10 +4,11 @@
   "pong": {
     "arrow_up": "Raise the Racket",
     "arrow_down": "Lower the Racket",
-    "understood": "Understood",
     "play_to_unlock_cv": "Make 15 passes to unlock my resume",
     "other_way_to_unlock": "There may be another way (or two) to unlock it 😉",
-    "play_again": "Play again"
+    "play_again": "Play again",
+    "1_vs_1": "Player versus player",
+    "1_vs_computer": "Player versus computer"
   },
   "home": {
     "title": "Welcome to my website",

@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import { usePongStore, type PlayerKeyType } from '@/stores/pong';
+import { usePongStore, type PlayerKeyType, type gameModeType } from '@/stores/pong';
 import RacketComponent from './RacketComponent.vue';
 import { storeToRefs } from 'pinia';
 import { onUnmounted, ref, computed } from 'vue';
 import BallComponent from './BallComponent.vue';
 import ModalComponent from '@/components/common/ModalComponent.vue';
 import ButtonComponent from '../common/ButtonComponent.vue';
+import { allowedKeys } from '../data/PongData';
 
 const pongStore = usePongStore();
 
-const { player1Coords, player2Coords, ballCoords, end, touchCounter} = storeToRefs(pongStore);
-const { setPlayerKey, play, reset, setEnd } = pongStore;
+const { player1Coords, player2Coords, ballCoords, end, touchCounter, gameMode} = storeToRefs(pongStore);
+const { setUserKeyPressing, play, reset, setEnd, setGameMode } = pongStore;
 const pressingDown = ref<Set<string>>(new Set());
 const start = ref(false);
 const counter = ref(0);
@@ -27,7 +28,8 @@ const clearCounterInterval = () => {
 	clearInterval(counterInterval.value ?? 0);
 };
 
-const startGame = () => {
+const startGame = (gameMode: gameModeType) => {
+	setGameMode(gameMode);
 	counter.value = 3;
 	start.value = true;
 	clearPlayInterval();
@@ -43,7 +45,7 @@ const startGame = () => {
 
 const playAgain = () => {
 	reset();
-	startGame();
+	startGame(gameMode.value);
 };
 
 const initPlay = () => {
@@ -58,19 +60,14 @@ const initPlay = () => {
 const keyUpEvent = (e: KeyboardEvent) => {
 	pressingDown.value.delete(e.key);
 	const values = Array.from(pressingDown.value);
-	if (pressingDown.value.size === 0)
-		setPlayerKey(null);
-	else {
-		if (e.key === "ArrowDown" || e.key === "ArrowUp") {
-			setPlayerKey(values[values.length - 1] as PlayerKeyType);
-		}
-	}
+	setUserKeyPressing(values);
 };
 const keyDownEvent = (e: KeyboardEvent) => {
-	pressingDown.value.add(e.key);
-
-	if (e.key === "ArrowDown" || e.key === "ArrowUp")
-		setPlayerKey(e.key);
+	if (allowedKeys.includes(e.key)) {
+		pressingDown.value.add(e.key);
+		const values = Array.from(pressingDown.value);
+		setUserKeyPressing(values);
+	}
 };
 
 document.addEventListener('keydown', keyDownEvent);
@@ -138,8 +135,11 @@ onUnmounted(() => {
         </div>
       </div>
       <div class="d-flex justify-center button">
-        <ButtonComponent @click="startGame">
-          {{ $t("pong.understood") }}
+        <ButtonComponent @click="() => startGame('1 vs 1')">
+          {{ $t("pong.1_vs_1") }}
+        </ButtonComponent>
+        <ButtonComponent @click="() => startGame('1 vs computer')">
+          {{ $t("pong.1_vs_computer") }}
         </ButtonComponent>
       </div>
     </template>
