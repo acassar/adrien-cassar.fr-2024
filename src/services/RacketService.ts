@@ -8,11 +8,11 @@ import { usePongStore } from "@/stores/pong";
 	 * the enemy.
 	 */
 export const moveDown = (type: 'player' | 'enemy') => {
-	const {setPlayerCoords, setEnemyCoords, playerCoords, enemyCoords} = usePongStore();
+	const {setPlayerCoords, setComputerCoords, playerCoords, computerCoords} = usePongStore();
 	if (type === 'player' && playerCoords.y + RACKET_HEIGHT < window.innerHeight ) {
 		setPlayerCoords({ x: playerCoords.x, y: playerCoords.y + RACKET_SPEED });
-	} else if (type === 'enemy' && enemyCoords.y + RACKET_HEIGHT < window.innerHeight) {
-		setEnemyCoords({ x: enemyCoords.x, y: enemyCoords.y + RACKET_SPEED });
+	} else if (type === 'enemy' && computerCoords.y + RACKET_HEIGHT < window.innerHeight) {
+		setComputerCoords({ x: computerCoords.x, y: computerCoords.y + RACKET_SPEED });
 	}
 };
 
@@ -23,10 +23,10 @@ export const moveDown = (type: 'player' | 'enemy') => {
  * the enemy.
  */
 export const moveUp = (type: 'player' | 'enemy') => {
-	const {setPlayerCoords, setEnemyCoords, playerCoords, enemyCoords} = usePongStore();
+	const {setPlayerCoords, setComputerCoords, playerCoords, computerCoords} = usePongStore();
 	if (type === 'player' && playerCoords.y > 0) {
 		setPlayerCoords({ x: playerCoords.x, y: playerCoords.y - RACKET_SPEED });
-	} else if (type === 'enemy' && enemyCoords.y > 0) {
-		setEnemyCoords({ x: enemyCoords.x, y: enemyCoords.y - RACKET_SPEED});
+	} else if (type === 'enemy' && computerCoords.y > 0) {
+		setComputerCoords({ x: computerCoords.x, y: computerCoords.y - RACKET_SPEED});
 	}
 };

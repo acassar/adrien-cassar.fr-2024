@@ -1,6 +1,7 @@
-import { usePongStore, type Coords } from "@/stores/pong";
+import { usePongStore, } from "@/stores/pong";
 import { handleRacketCollisions } from "./BoundariesService";
 import { RACKET_HEIGHT } from "@/components/data/PongData";
+import type { Coords } from "@/class/pong/coords";
 
 
 /**
@@ -20,8 +21,8 @@ export const moveBall = () => {
  * bounce off the player's racket and incrementing a touch counter.
  */
 const handlePlayerCollisions = () => {
-	const {ballCoords, playerCoords, incrementTouchCounter} = usePongStore();
-	const contact = handleRacketCollisions(playerCoords, ballCoords);
+	const {playerCoords, incrementTouchCounter} = usePongStore();
+	const contact = handleRacketCollisions(playerCoords);
 	if (contact) {
 		bounce(playerCoords);
 		incrementTouchCounter();
@@ -35,13 +36,13 @@ const handlePlayerCollisions = () => {
  * enemy's next contact point difference, incrementing the touch counter, and bouncing the ball.
  */
 const handleEnemyCollisions = () => {
-	const {ballCoords, enemyCoords, setNewEnemyNextContactPointDiff, incrementTouchCounter} = usePongStore();
+	const {computerCoords, setNewEnemyNextContactPointDiff, incrementTouchCounter} = usePongStore();
 
-	const contact = handleRacketCollisions(enemyCoords, ballCoords);
+	const contact = handleRacketCollisions(computerCoords);
 	if (contact) {
 		setNewEnemyNextContactPointDiff();
 		incrementTouchCounter();
-		bounce(enemyCoords);
+		bounce(computerCoords);
 	}
 };
 

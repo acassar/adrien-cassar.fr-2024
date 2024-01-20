@@ -1,21 +1,23 @@
 import { computed, ref } from 'vue';
 import { defineStore } from 'pinia';
-import { BALL_SPEED, RACKET_HEIGHT, defaultStoreValues } from '@/components/data/PongData';
+import { BALL_SIZE, BALL_SPEED, RACKET_HEIGHT, defaultStoreValues } from '@/components/data/PongData';
 import { newCoordsInScreenBoundaries } from '@/services/BoundariesService';
 import { moveDown, moveUp } from '@/services/RacketService';
 import { moveBall } from '@/services/BallService';
+import { Racket } from '@/class/pong/racket';
+import { Ball } from '@/class/pong/ball';
+import type { Coords } from '@/class/pong/coords';
 
-export type Coords = { x: number, y: number}
 export type PlayerKeyType = null | undefined | "ArrowUp" | "ArrowDown"
 
 const getContactPointDiff = () => (Math.random() * 2 - 1) * RACKET_HEIGHT / 2;
 
 
 export const usePongStore = defineStore('pong', () => {
-	const playerCoords = ref<Coords>(defaultStoreValues.playerCoords);
-	const enemyCoords = ref<Coords>(defaultStoreValues.enemyCoords);
-	const ballCoords = ref<Coords>(defaultStoreValues.ballCoords);
-	const ballDir = ref<Coords>(defaultStoreValues.ballDir);
+	const playerRacket = ref<Racket>(new Racket(defaultStoreValues.playerCoords, 'player'));
+	const computerRacket = ref<Racket>(new Racket(defaultStoreValues.computerCoords, 'computer'));
+
+	const ball = ref<Ball>(new Ball(defaultStoreValues.ballCoords, defaultStoreValues.ballDir, BALL_SPEED, BALL_SIZE));
 	const touchCounter = ref(defaultStoreValues.touchCounter);
 
 	const enemyNextContactPointDiff = ref(getContactPointDiff());
@@ -27,8 +29,14 @@ export const usePongStore = defineStore('pong', () => {
 
 	/* Getters */
 
-	const dirXWithSpeed = computed(() => ballDir.value.x * BALL_SPEED);
-	const dirYWithSpeed = computed(() => ballDir.value.y * BALL_SPEED);
+	const dirXWithSpeed = computed(() => ball.value.dir.x * BALL_SPEED);
+	const dirYWithSpeed = computed(() => ball.value.dir.y * BALL_SPEED);
+
+	const ballCoords = computed(() => ball.value.coords);
+	const ballDir = computed(() => ball.value.dir);
+
+	const playerCoords = computed(() => playerRacket.value.coords);
+	const computerCoords = computed(() => computerRacket.value.coords);
 
 	/* Setters */
 
@@ -42,19 +50,19 @@ export const usePongStore = defineStore('pong', () => {
 	const setPlayerKey = (key: PlayerKeyType) => playerKey.value = key;
 
 	const setPlayerCoords = (coords: Coords) => {
-		playerCoords.value = coords;
+		playerRacket.value.coords = coords;
 	};
 
-	const setEnemyCoords = (coords: Coords) => {
-		enemyCoords.value = coords;
+	const setComputerCoords = (coords: Coords) => {
+		computerRacket.value.coords = coords;
 	};
 
 	const setBallDir = (_ballDir: Coords) => {
-		ballDir.value = _ballDir;
+		ball.value.dir = _ballDir;
 	};
 
 	const setBallCoords = (coords: Coords) => {
-		ballCoords.value = coords;
+		ball.value.coords = coords;
 	};
 
 	const setEnd = (_end: boolean) => {
@@ -97,9 +105,9 @@ export const usePongStore = defineStore('pong', () => {
 	};
 
 	const moveEnemy = () => {
-		if (enemyCoords.value.y + RACKET_HEIGHT / 2 + enemyNextContactPointDiff.value > ballCoords.value.y) {
+		if (computerRacket.value.coords.y + RACKET_HEIGHT / 2 + enemyNextContactPointDiff.value > ball.value.coords.y) {
 			moveUp("enemy");
-		} else if (enemyCoords.value.y + RACKET_HEIGHT / 2 + enemyNextContactPointDiff.value < ballCoords.value.y) {
+		} else if (computerRacket.value.coords.y + RACKET_HEIGHT / 2 + enemyNextContactPointDiff.value < ball.value.coords.y) {
 			moveDown("enemy");
 		}
 	};
@@ -118,7 +126,7 @@ export const usePongStore = defineStore('pong', () => {
 
 	const reset = () => {
 		setPlayerCoords(defaultStoreValues.playerCoords);
-		setEnemyCoords(defaultStoreValues.enemyCoords);
+		setComputerCoords(defaultStoreValues.computerCoords);
 		setBallDir(defaultStoreValues.ballDir);
 		setBallCoords(defaultStoreValues.ballCoords);
 	};
@@ -127,24 +135,24 @@ export const usePongStore = defineStore('pong', () => {
 	return {
 		setNewEnemyNextContactPointDiff,
 		reset,
-		playerCoords,
-		enemyCoords,
 		setPlayerCoords,
-		setEnemyCoords,
+		setComputerCoords,
 		playerKey,
 		setPlayerKey,
 		play,
 		ballCoords,
+		ballDir,
 		dirXWithSpeed,
 		dirYWithSpeed,
 		boundaries,
-		ballDir,
 		setBallDir,
 		newCoordsInBoundaries: newCoordsInScreenBoundaries,
 		setBallCoords,
 		end,
 		setEnd,
 		incrementTouchCounter,
-		touchCounter
+		touchCounter,
+		playerCoords,
+		computerCoords
 	};
 });

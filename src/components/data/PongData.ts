@@ -6,7 +6,7 @@ const BALL_SIZE = 10; //in px
 const BALL_SPEED = 1.8; //in px
 const defaultStoreValues = {
 	playerCoords: { x: SPACE_SIDES, y: window.innerHeight / 2 },
-	enemyCoords: { x: window.innerWidth - (RACKET_WIDTH + SPACE_SIDES), y: window.innerHeight / 2 },
+	computerCoords: { x: window.innerWidth - (RACKET_WIDTH + SPACE_SIDES), y: window.innerHeight / 2 },
 	ballCoords: { x: window.innerWidth / 2, y: window.innerHeight / 2},
 	ballDir: { x: Math.floor(Math.random()) * 2 - 1, y: Math.random() * 2 - 1 },
 	touchCounter: 0,

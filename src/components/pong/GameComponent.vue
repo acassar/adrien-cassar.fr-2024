@@ -9,7 +9,7 @@ import ButtonComponent from '../common/ButtonComponent.vue';
 
 const pongStore = usePongStore();
 
-const { playerCoords, enemyCoords, ballCoords, end, touchCounter} = storeToRefs(pongStore);
+const { playerCoords, computerCoords, ballCoords, end, touchCounter} = storeToRefs(pongStore);
 const { setPlayerKey, play, reset, setEnd } = pongStore;
 const pressingDown = ref<Set<string>>(new Set());
 const start = ref(false);
@@ -150,7 +150,7 @@ onUnmounted(() => {
       type="player "
     />
     <RacketComponent
-      :coords="enemyCoords"
+      :coords="computerCoords"
       type="enemy"
     />
     <BallComponent :coords="ballCoords" />

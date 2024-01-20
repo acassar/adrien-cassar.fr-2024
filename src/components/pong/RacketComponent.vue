@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Coords } from '@/stores/pong';
+import type { Coords } from '@/class/pong/coords';
 import { RACKET_HEIGHT, RACKET_WIDTH } from '../data/PongData';
 
 defineProps<{
