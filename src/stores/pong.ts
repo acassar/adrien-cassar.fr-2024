@@ -2,7 +2,6 @@ import { computed, ref } from 'vue';
 import { defineStore } from 'pinia';
 import { BALL_SIZE, BALL_SPEED, RACKET_HEIGHT, defaultStoreValues } from '@/components/data/PongData';
 import { newCoordsInScreenBoundaries } from '@/services/BoundariesService';
-import { moveDown, moveUp } from '@/services/RacketService';
 import { moveBall } from '@/services/BallService';
 import { Racket } from '@/class/pong/racket';
 import { Ball } from '@/class/pong/ball';
@@ -14,8 +13,8 @@ const getContactPointDiff = () => (Math.random() * 2 - 1) * RACKET_HEIGHT / 2;
 
 
 export const usePongStore = defineStore('pong', () => {
-	const playerRacket = ref<Racket>(new Racket(defaultStoreValues.playerCoords, 'player'));
-	const computerRacket = ref<Racket>(new Racket(defaultStoreValues.computerCoords, 'computer'));
+	const player1Racket = ref<Racket>(new Racket(defaultStoreValues.player1Coords, 'player'));
+	const player2Racket = ref<Racket>(new Racket(defaultStoreValues.player2Coords, 'computer'));
 
 	const ball = ref<Ball>(new Ball(defaultStoreValues.ballCoords, defaultStoreValues.ballDir, BALL_SPEED, BALL_SIZE));
 	const touchCounter = ref(defaultStoreValues.touchCounter);
@@ -35,8 +34,8 @@ export const usePongStore = defineStore('pong', () => {
 	const ballCoords = computed(() => ball.value.coords);
 	const ballDir = computed(() => ball.value.dir);
 
-	const playerCoords = computed(() => playerRacket.value.coords);
-	const computerCoords = computed(() => computerRacket.value.coords);
+	const player1Coords = computed(() => player1Racket.value.coords);
+	const player2Coords = computed(() => player2Racket.value.coords);
 
 	/* Setters */
 
@@ -49,12 +48,12 @@ export const usePongStore = defineStore('pong', () => {
 
 	const setPlayerKey = (key: PlayerKeyType) => playerKey.value = key;
 
-	const setPlayerCoords = (coords: Coords) => {
-		playerRacket.value.coords = coords;
+	const setPlayer1Coords = (coords: Coords) => {
+		player1Racket.value.coords = coords;
 	};
 
-	const setComputerCoords = (coords: Coords) => {
-		computerRacket.value.coords = coords;
+	const setPlayer2Coords = (coords: Coords) => {
+		player2Racket.value.coords = coords;
 	};
 
 	const setBallDir = (_ballDir: Coords) => {
@@ -85,18 +84,19 @@ export const usePongStore = defineStore('pong', () => {
 		};
 	};
 
+
 	/**
-	 * The function `movePlayer` checks the value of `playerKey` and calls the appropriate function to
-	 * move the player up or down based on the arrow key pressed.
-	 */
+ 	* The function `movePlayer` checks the value of `playerKey` and moves the player's racket up or down
+ 	* based on the arrow key pressed.
+ 	*/
 	const movePlayer = () => {
 		if (playerKey.value) {
 			switch (playerKey.value) {
 				case "ArrowUp":
-					moveUp("player");
+					player1Racket.value.move("up");
 					break;
 				case "ArrowDown":
-					moveDown("player");
+					player1Racket.value.move("down");
 					break;
 				default:
 					break;
@@ -104,11 +104,20 @@ export const usePongStore = defineStore('pong', () => {
 		}
 	};
 
-	const moveEnemy = () => {
-		if (computerRacket.value.coords.y + RACKET_HEIGHT / 2 + enemyNextContactPointDiff.value > ball.value.coords.y) {
-			moveUp("enemy");
-		} else if (computerRacket.value.coords.y + RACKET_HEIGHT / 2 + enemyNextContactPointDiff.value < ball.value.coords.y) {
-			moveDown("enemy");
+
+
+	/**
+	 * The function `moveComputer` calculates the point of contact between the computer's racket and the
+	 * ball, and moves the racket up or down based on the position of the ball.
+	 */
+	const moveComputer = () => {
+		const pointOfContact = player2Racket.value.coords.y + RACKET_HEIGHT / 2 + enemyNextContactPointDiff.value;
+		const isBelowBall = pointOfContact > ball.value.coords.y;
+		const isAboveBall = pointOfContact < ball.value.coords.y;
+		if (isBelowBall) {
+			player2Racket.value.move('up');
+		} else if (isAboveBall) {
+			player2Racket.value.move('down');
 		}
 	};
 
@@ -119,14 +128,18 @@ export const usePongStore = defineStore('pong', () => {
 	 */
 	const play = () => {
 		movePlayer();
-		moveEnemy();
+		moveComputer();
 		updateBoundaries();
 		moveBall();
 	};
 
+	/**
+	 * The function "reset" resets the coordinates and direction of the players and the ball to their
+	 * default values.
+	 */
 	const reset = () => {
-		setPlayerCoords(defaultStoreValues.playerCoords);
-		setComputerCoords(defaultStoreValues.computerCoords);
+		setPlayer1Coords(defaultStoreValues.player1Coords);
+		setPlayer2Coords(defaultStoreValues.player2Coords);
 		setBallDir(defaultStoreValues.ballDir);
 		setBallCoords(defaultStoreValues.ballCoords);
 	};
@@ -135,8 +148,8 @@ export const usePongStore = defineStore('pong', () => {
 	return {
 		setNewEnemyNextContactPointDiff,
 		reset,
-		setPlayerCoords,
-		setComputerCoords,
+		setPlayer1Coords,
+		setPlayer2Coords,
 		playerKey,
 		setPlayerKey,
 		play,
@@ -152,7 +165,8 @@ export const usePongStore = defineStore('pong', () => {
 		setEnd,
 		incrementTouchCounter,
 		touchCounter,
-		playerCoords,
-		computerCoords
+		player1Coords,
+		player2Coords,
+		ball,
 	};
 });

@@ -48,7 +48,7 @@ export const newCoordsInScreenBoundaries = (actualCoords: Coords, dirCoords: Coo
  * @returns a boolean value, which indicates whether there is a collision between the ball and the
  * racket.
  */
-export const handleRacketCollisions = (racketCoords: Coords): boolean => {
+export const handleRacketCollision = (racketCoords: Coords): boolean => {
 	const {x: newX, y: newY} = getNextBallCoords();
 	let contact = false;
 
