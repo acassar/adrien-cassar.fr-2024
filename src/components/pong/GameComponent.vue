@@ -7,6 +7,7 @@ import BallComponent from './BallComponent.vue';
 import ModalComponent from '@/components/common/ModalComponent.vue';
 import ButtonComponent from '../common/ButtonComponent.vue';
 import { allowedKeys } from '../data/PongData';
+import CommandComponent from './CommandComponent.vue';
 
 const pongStore = usePongStore();
 
@@ -115,15 +116,17 @@ onUnmounted(() => {
         {{ $t("title") }}
       </h2>
       <div class="d-flex row">
-        <div class="flex-column">
-          <div class="d-flex align-center">
-            <span class="icon">⬆️</span>
-            <span>{{ $t("pong.arrow_up") }}</span>
-          </div>
-          <div class="d-flex align-center">
-            <span class="icon">⬇️</span>
-            <span>{{ $t("pong.arrow_down") }}</span>
-          </div>
+        <div class="flex-column ">
+          <CommandComponent
+            :player="1"
+            key-for-up="⬆"
+            key-for-down="⬇"
+          />
+          <CommandComponent
+            :player="2"
+            key-for-up="Z"
+            key-for-down="S"
+          />
         </div>
         <div class="separator" />
         <div>
@@ -197,10 +200,7 @@ onUnmounted(() => {
 .button {
 	margin: 1rem;
 }
-.icon {
-	font-size: 40px;
-	margin: 0.2rem;
-}
+
 .container {
     width: 100vw;
     height: 100vh;
