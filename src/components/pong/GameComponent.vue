@@ -119,13 +119,13 @@ onUnmounted(() => {
         <div class="flex-column ">
           <CommandComponent
             :player="1"
-            key-for-up="⬆"
-            key-for-down="⬇"
+            key-for-up="Z"
+            key-for-down="S"
           />
           <CommandComponent
             :player="2"
-            key-for-up="Z"
-            key-for-down="S"
+            key-for-up="⬆"
+            key-for-down="⬇"
           />
         </div>
         <div class="separator" />
