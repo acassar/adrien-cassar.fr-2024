@@ -2,14 +2,14 @@
 import { computed } from 'vue';
 
 const emit = defineEmits(['click']);
-type ButtonType = 'primary' | 'secondary'
+type ButtonType = 'default' | 'outline'
 
 const props = withDefaults(defineProps<{
 	visible?: boolean
 	type?: ButtonType
-}>(), {type: 'primary', visible: true});
+}>(), {type: 'default', visible: true});
 
-const getTypeClass = computed(() => props.type);
+const getTypeClass = computed(() => `btn-${props.type}`);
 
 </script>
 
@@ -26,12 +26,14 @@ const getTypeClass = computed(() => props.type);
 
 <style scoped>
 
-.primary {
+.btn-default {
     background-color: var(--primary);
 }
 
-.secondary {
-    background-color: var(--secondary);
+.btn-outline {
+    background-color: transparent;
+    border: 1px solid var(--primary);
+    color: white;
 }
 
 button {
@@ -45,7 +47,17 @@ button {
 }
 
 button:hover {
-    cursor: pointer;
+  cursor: pointer;
+}
+
+
+.btn-default:hover {
     background-color: var(--primary-hover);
 }
+
+.btn-outline:hover {
+  color: var(--primary);
+}
+
+
 </style>

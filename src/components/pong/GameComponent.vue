@@ -138,6 +138,12 @@ onUnmounted(() => {
         </div>
       </div>
       <div class="d-flex justify-center button">
+        <ButtonComponent
+          type="outline"
+          @click="() => $router.back()"
+        >
+          {{ $t("back") }}
+        </ButtonComponent>
         <ButtonComponent @click="() => startGame('1 vs 1')">
           {{ $t("pong.1_vs_1") }}
         </ButtonComponent>

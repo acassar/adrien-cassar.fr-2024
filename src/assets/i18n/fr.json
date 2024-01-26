@@ -1,6 +1,7 @@
 {
   "title": "Comment jouer",
   "download_cv": "Voir mon CV",
+  "back": "Retour",
   "pong": {
     "arrow_up": "Monter la raquette",
     "arrow_down": "Descendre la raquette",

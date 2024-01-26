@@ -1,6 +1,7 @@
 {
   "title": "How to play",
   "download_cv": "See my Resume",
+  "back": "Back",
   "pong": {
     "arrow_up": "Raise the Racket",
     "arrow_down": "Lower the Racket",
