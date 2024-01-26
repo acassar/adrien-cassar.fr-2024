@@ -96,13 +96,13 @@ export const usePongStore = defineStore('pong', () => {
 	 */
 	const movePlayer = () => {
 		if (userPressingKeys.value) {
-			if (userPressingKeys.value.some((key) => key.toLowerCase() === "z") && gameMode.value === '1 vs 1')
+			if (userPressingKeys.value.some((key) => key.toLowerCase() === "z") )
 				player1Racket.value.move('up');
-			if (userPressingKeys.value.some((key) => key.toLowerCase() === "s") && gameMode.value === '1 vs 1')
+			if (userPressingKeys.value.some((key) => key.toLowerCase() === "s") )
 				player1Racket.value.move('down');
-			if (userPressingKeys.value.some((key => key === "ArrowUp")))
+			if (userPressingKeys.value.some((key => key === "ArrowUp" && gameMode.value === '1 vs 1')))
 				player2Racket.value.move('up');
-			if (userPressingKeys.value.some((key => key === "ArrowDown")))
+			if (userPressingKeys.value.some((key => key === "ArrowDown" && gameMode.value === '1 vs 1')))
 				player2Racket.value.move('down');
 		}
 	};
