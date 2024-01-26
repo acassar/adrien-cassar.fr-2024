@@ -77,6 +77,8 @@ document.addEventListener('keyup', keyUpEvent);
 onUnmounted(() => {
 	document.removeEventListener("keydown", keyDownEvent);
 	document.removeEventListener("keyup", keyUpEvent);
+	clearPlayInterval();
+	clearCounterInterval();
 });
 
 
