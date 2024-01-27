@@ -13,6 +13,11 @@ const router = createRouter({
 			path: "/pong",
 			name: "pong",
 			component: () => import("../components/pong/GameComponent.vue")
+		},
+		{
+			path: "/tetris",
+			name: "tetris",
+			component: () => import("../components/Tetris/TetrisGameComponent.vue")
 		}
 	]
 });

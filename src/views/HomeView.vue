@@ -36,6 +36,12 @@ const changeLocale = (locale: string) => {
       >
         <ButtonComponent>Pong</ButtonComponent>
       </router-link>
+
+      <router-link
+        :to="{ name: 'tetris' }"
+      >
+        <ButtonComponent>Tetris</ButtonComponent>
+      </router-link>
     </div>
   </main>
 </template>
