@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Coords } from '@/class/pong/coords';
+import type { Coords } from '@/class/common/coords';
 import { BALL_SIZE } from '../data/PongData';
 defineProps<{
 	coords: Coords,

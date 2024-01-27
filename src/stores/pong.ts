@@ -5,7 +5,7 @@ import { newCoordsInScreenBoundaries } from '@/services/BoundariesService';
 import { moveBall } from '@/services/BallService';
 import { Racket } from '@/class/pong/racket';
 import { Ball } from '@/class/pong/ball';
-import type { Coords } from '@/class/pong/coords';
+import type { Coords } from '@/class/common/coords';
 
 export type PlayerKeyType = string
 export type gameModeType = '1 vs computer' | '1 vs 1' | undefined;

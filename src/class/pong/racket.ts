@@ -1,5 +1,5 @@
 import { RACKET_HEIGHT, RACKET_SPEED } from "@/components/data/PongData";
-import type { Coords } from "./coords";
+import type { Coords } from "../common/coords";
 
 type racketType = 'player' | 'computer';
 

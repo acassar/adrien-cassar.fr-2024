@@ -1,7 +1,7 @@
 import { RACKET_HEIGHT, RACKET_WIDTH } from "@/components/data/PongData";
 import { usePongStore, } from "@/stores/pong";
 import { getNextBallCoords } from "./BallService";
-import type { Coords } from "@/class/pong/coords";
+import type { Coords } from "@/class/common/coords";
 
 /**
 	 * The function `newCoordsInScreenBoundaries` calculates new coordinates for a ball within specified

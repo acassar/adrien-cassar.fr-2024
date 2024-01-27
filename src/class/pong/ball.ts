@@ -1,5 +1,5 @@
 import { usePongStore } from "@/stores/pong";
-import type { Coords } from "./coords";
+import type { Coords } from "../common/coords";
 import { changeYMovement, getNextBallCoords } from "@/services/BallService";
 
 export class Ball {

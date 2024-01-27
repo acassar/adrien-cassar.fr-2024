@@ -1,7 +1,7 @@
 import { usePongStore, } from "@/stores/pong";
 import { handleRacketCollision } from "./BoundariesService";
 import { RACKET_HEIGHT } from "@/components/data/PongData";
-import type { Coords } from "@/class/pong/coords";
+import type { Coords } from "@/class/common/coords";
 
 
 /**
