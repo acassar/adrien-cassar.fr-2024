@@ -2,14 +2,17 @@
 import { Grid } from '@/class/tetris/grid';
 import CellComponent from './CellComponent.vue';
 import { inject } from 'vue';
+import { toRef } from 'vue';
 
-const {grid, gridSizeX, gridSizeY} = defineProps<{
+const {grid, gridSizeX} = defineProps<{
 	grid: Grid,
 	gridSizeX: number,
 	gridSizeY: number,
 }>();
 
 const squareSize = inject('squareSize') as number;
+
+const gridRef = toRef(grid);
 
 const gridStyle = {
 	width: `${squareSize * gridSizeX}px`
@@ -23,21 +26,18 @@ const gridStyle = {
       :style="gridStyle"
     >
       <div
-        v-for="(cell, index) in grid.grid"
-        :key="index"
-        class="cell-container"
+        v-for="cell in gridRef.grid"
+        :key="cell.position"
       >
-        <CellComponent :cell="cell" />
+        <CellComponent
+          :cell="cell"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.cell-container {
-  display: block;
-}
-
 .grid {
   display: flex;
   flex-wrap: wrap;

@@ -8,7 +8,6 @@ export class Grid {
 		for (const cell of piece.squares) {
 			this.grid[cell.position].cellState = CellState.OCCUPIED;
 		}
-		console.log(this.grid);
 	}
 
 	constructor(gridSize: {x: number, y: number}) {

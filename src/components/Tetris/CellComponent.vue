@@ -1,21 +1,23 @@
 <script setup lang="ts">
 import { CellState, type Cell } from '@/class/tetris/cell';
+import { computed } from 'vue';
 import { ref } from 'vue';
 import { inject } from 'vue';
 
 const {cell} = defineProps<{
-	cell: Cell
+	cell: Cell,
 }>();
 
 const squareSize = inject('squareSize');
-const cellStyle = {
+const cellStyle = ref({
 	width: `${squareSize}px`,
 	height: `${squareSize}px`,
-};
+});
 
-const cellClass = ref({
-	cell: true,
-	occupied: cell.cellState === CellState.OCCUPIED
+const cellClass = computed(() => {
+	return {cell: true,
+		occupied: cell.cellState === CellState.OCCUPIED
+	};
 });
 
 </script>
@@ -29,10 +31,10 @@ const cellClass = ref({
 
 <style scoped>
 .occupied {
-  background-color: blue;
+  background-color: red;
 }
 .cell {
-    border: solid 1px red;
+    border: solid 1px rgba(64, 56, 92, 0.281);
     display: block;
 }
 </style>

@@ -1,18 +1,21 @@
 <script setup lang="ts">
-import {provide, onMounted} from 'vue';
+import {onMounted, provide} from 'vue';
 import GridComponent from './GridComponent.vue';
 import { Grid } from '@/class/tetris/grid';
 import { TPiece } from '@/class/tetris/pieces/TPiece';
+import { ref } from 'vue';
+import { CellState } from '@/class/tetris/cell';
 const gridSizeY = 22;
 const gridSizeX = 10;
 const SQUARESIZE = Math.floor(window.innerHeight / gridSizeY - 1);
-const grid = new Grid({x: gridSizeX, y: gridSizeY});
+const grid = ref(new Grid({x: gridSizeX, y: gridSizeY}));
 
 provide("squareSize", SQUARESIZE);
 
 onMounted(() => {
-	grid.addPiece(new TPiece(gridSizeX));
+	grid.value.addPiece(new TPiece(gridSizeX));
 });
+
 
 </script>
 
