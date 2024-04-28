@@ -1,0 +1,1 @@
+export type GridSize = {x: number, y: number}

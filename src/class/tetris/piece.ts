@@ -1,9 +1,9 @@
 import type { Cell } from "./cell";
 
 export abstract class Piece {
-	squares: Cell[];
+	cells: Cell[];
 
-	constructor(squares: Cell[]) {
-		this.squares = squares;
+	constructor(cells: Cell[]) {
+		this.cells = cells;
 	}
 }

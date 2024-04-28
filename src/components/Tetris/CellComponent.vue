@@ -15,8 +15,10 @@ const cellStyle = ref({
 });
 
 const cellClass = computed(() => {
-	return {cell: true,
-		occupied: cell.cellState === CellState.OCCUPIED
+	return {
+		cell: true,
+		occupied: cell.cellState === CellState.OCCUPIED,
+		playerPiece: cell.cellState === CellState.PLAYERPIECE
 	};
 });
 
@@ -32,6 +34,9 @@ const cellClass = computed(() => {
 <style scoped>
 .occupied {
   background-color: red;
+}
+.playerPiece {
+  background-color: blue;
 }
 .cell {
     border: solid 1px rgba(64, 56, 92, 0.281);

@@ -4,18 +4,26 @@ import GridComponent from './GridComponent.vue';
 import { Grid } from '@/class/tetris/grid';
 import { TPiece } from '@/class/tetris/pieces/TPiece';
 import { ref } from 'vue';
-import { CellState } from '@/class/tetris/cell';
+import { onUnmounted } from 'vue';
 const gridSizeY = 22;
 const gridSizeX = 10;
 const SQUARESIZE = Math.floor(window.innerHeight / gridSizeY - 1);
 const grid = ref(new Grid({x: gridSizeX, y: gridSizeY}));
 
 provide("squareSize", SQUARESIZE);
+const gameSpeed = ref(1000);
 
 onMounted(() => {
 	grid.value.addPiece(new TPiece(gridSizeX));
 });
 
+const interval = setInterval(() => {
+	grid.value.fallActivePiece();
+}, gameSpeed.value);
+
+onUnmounted(() => {
+	clearInterval(interval);
+});
 
 </script>
 
