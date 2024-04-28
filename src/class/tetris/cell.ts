@@ -5,8 +5,10 @@ export enum CellState {
 
 export class Cell {
 	cellState: CellState;
+	position: number;
 
-	constructor() {
+	constructor(position: number) {
 		this.cellState = CellState.EMPTY;
+		this.position = position;
 	}
 }

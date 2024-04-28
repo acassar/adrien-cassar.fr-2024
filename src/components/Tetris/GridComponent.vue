@@ -3,10 +3,12 @@ import { Grid } from '@/class/tetris/grid';
 import CellComponent from './CellComponent.vue';
 import { inject } from 'vue';
 
-const gridSizeX = 10;
-const gridSizeY = 14;
+const {grid, gridSizeX, gridSizeY} = defineProps<{
+	grid: Grid,
+	gridSizeX: number,
+	gridSizeY: number,
+}>();
 
-const grid = new Grid({x: gridSizeX, y: gridSizeY});
 const squareSize = inject('squareSize') as number;
 
 const gridStyle = {
@@ -25,7 +27,7 @@ const gridStyle = {
         :key="index"
         class="cell-container"
       >
-        <CellComponent />
+        <CellComponent :cell="cell" />
       </div>
     </div>
   </div>
