@@ -1,29 +1,34 @@
 import type { GridSize } from "@/types/tetris/grid";
 import { Cell, CellState } from "./cell";
 import type { Piece } from "./piece";
+import type { PieceBlock } from "./pieceBlock";
 
 export class Grid {
 	grid: Cell[];
 	activePiece: Piece | undefined;
 	gridSize: GridSize;
+	blocks: PieceBlock[];
 
 	addPiece(piece: Piece): void {
 		this.activePiece = piece;
-		for (const cell of piece.cells) {
-			this.grid[cell.position].cellState = CellState.PLAYERPIECE;
+		for (const block of piece.pieceBlocks) {
+			this.grid[block.position].cellState = CellState.PLAYERPIECE;
 		}
 	}
 
-	canFall = (cell: Cell): boolean => this.grid[cell.position + this.gridSize.x].cellState !== CellState.OCCUPIED;
+	canFall = (block: PieceBlock): boolean => this.grid[block.position + this.gridSize.x].cellState !== CellState.OCCUPIED;
 
 	fallActivePiece() {
-		const cells = this.activePiece?.cells;
-		if (cells) {
-			const pieceCanFall = !cells.some(cell => !this.canFall(cell));
+		const blocks = this.activePiece?.pieceBlocks;
+		if (blocks) {
+			const pieceCanFall = !blocks.some(block => !this.canFall(block));
 			if (pieceCanFall) {
-				for (const cell of cells.sort(cell => -cell.position)) {
-					this.grid[cell.position + this.gridSize.x].cellState = CellState.PLAYERPIECE;
-					this.grid[cell.position].cellState = CellState.EMPTY;
+				for (const block of blocks) {
+					this.grid[block.position].cellState = CellState.EMPTY;
+				}
+				for (const block of blocks.sort(block => -block.position)) {
+					block.fall(this.gridSize);
+					this.grid[block.position].cellState = CellState.PLAYERPIECE;
 				}
 			}
 		}
@@ -32,6 +37,7 @@ export class Grid {
 	constructor(gridSize: GridSize) {
 		this.gridSize = gridSize;
 		this.grid = new Array<Cell>(gridSize.x * gridSize.y);
+		this.blocks = [];
 		for (let i = 0; i < this.grid.length; i++) {
 			this.grid[i] = new Cell(i);
 		}

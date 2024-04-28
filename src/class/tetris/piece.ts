@@ -1,9 +1,9 @@
-import type { Cell } from "./cell";
+import type { PieceBlock } from "./pieceBlock";
 
 export abstract class Piece {
-	cells: Cell[];
+	pieceBlocks: PieceBlock[];
 
-	constructor(cells: Cell[]) {
-		this.cells = cells;
+	constructor(pieceBlocks: PieceBlock[]) {
+		this.pieceBlocks = pieceBlocks;
 	}
 }
