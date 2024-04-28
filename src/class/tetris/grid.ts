@@ -16,7 +16,10 @@ export class Grid {
 		}
 	}
 
-	canFall = (block: PieceBlock): boolean => this.grid[block.position + this.gridSize.x].cellState !== CellState.OCCUPIED;
+	canFall = (block: PieceBlock): boolean => {
+		const cell = this.grid[block.position + this.gridSize.x];
+		return cell && cell.cellState !== CellState.OCCUPIED;
+	};
 
 	fallActivePiece() {
 		const blocks = this.activePiece?.pieceBlocks;

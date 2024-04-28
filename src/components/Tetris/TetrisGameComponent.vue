@@ -11,7 +11,7 @@ const SQUARESIZE = Math.floor(window.innerHeight / gridSizeY - 1);
 const grid = ref(new Grid({x: gridSizeX, y: gridSizeY}));
 
 provide("squareSize", SQUARESIZE);
-const gameSpeed = ref(1000);
+const gameSpeed = ref(100);
 
 onMounted(() => {
 	grid.value.addPiece(new TPiece(gridSizeX));
