@@ -1,9 +1,14 @@
 <script setup lang="ts">
+import {provide} from 'vue';
+import GridComponent from './GridComponent.vue';
+const SQUARESIZE = 50;
+
+provide("squareSize", SQUARESIZE);
 
 </script>
 
 <template>
-  <div>hello</div>
+  <GridComponent />
 </template>
 
 <style scoped>
