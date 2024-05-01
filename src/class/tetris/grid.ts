@@ -2,6 +2,7 @@ import type { GridSize } from "@/types/tetris/grid";
 import { Cell, CellState } from "./cell";
 import type { Piece } from "./piece";
 import type { PieceBlock } from "./pieceBlock";
+import { TPiece } from "./pieces/TPiece";
 
 export class Grid {
 	grid: Cell[];
@@ -9,11 +10,36 @@ export class Grid {
 	gridSize: GridSize;
 	blocks: PieceBlock[];
 
+	/**
+	 * Add a piece to the grid
+	 * @param piece the piece that will be added
+	 */
 	addPiece(piece: Piece): void {
 		this.activePiece = piece;
 		for (const block of piece.pieceBlocks) {
 			this.grid[block.position].cellState = CellState.PLAYERPIECE;
 		}
+	}
+
+	/**
+	 * Freeze the active piece in the grid
+	 */
+	freezePiece(): void {
+		if (!this.activePiece)
+			throw Error("cannot find active piece");
+		for (const block of this.activePiece.pieceBlocks) {
+			this.grid[block.position].cellState = CellState.OCCUPIED;
+			this.activePiece = undefined;
+		}
+	}
+
+	/**
+	  * Handle active piece collision with other pieces
+	  */
+	handleCollision() {
+		this.freezePiece();
+		// this.handleFullRow();//TODO
+		this.addPiece(new TPiece(this.gridSize.x));
 	}
 
 	/**
@@ -41,6 +67,8 @@ export class Grid {
 					block.fall(this.gridSize);
 					this.grid[block.position].cellState = CellState.PLAYERPIECE;
 				}
+			} else {
+				this.handleCollision();
 			}
 		}
 	}
