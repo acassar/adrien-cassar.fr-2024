@@ -11,7 +11,7 @@ const SQUARESIZE = Math.floor(window.innerHeight / gridSizeY - 1);
 const grid = ref(new Grid({x: gridSizeX, y: gridSizeY}));
 
 provide("squareSize", SQUARESIZE);
-const gameSpeed = ref(100);
+const gameSpeed = ref(1000);
 
 onMounted(() => {
 	grid.value.addPiece(new TPiece(gridSizeX));
@@ -24,6 +24,32 @@ const interval = setInterval(() => {
 onUnmounted(() => {
 	clearInterval(interval);
 });
+
+const keyDownEvent = (event: KeyboardEvent) => {
+	switch (event.key) {
+		case "ArrowLeft":
+			grid.value.moveActivePieceLeft();
+			break;
+		case "ArrowRight":
+			grid.value.moveActivePieceRight();
+			break;
+		case "ArrowDown":
+			grid.value.fallActivePiece();
+			break;
+		case "ArrowUp":
+			// grid.value.rotateActivePiece(); => TODO
+			break;
+		default:
+			break;
+	}
+};
+
+addEventListener('keydown', keyDownEvent);
+
+onUnmounted(() => {
+	document.removeEventListener("keydown", keyDownEvent);
+});
+
 
 </script>
 

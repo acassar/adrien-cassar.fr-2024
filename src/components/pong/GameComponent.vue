@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { usePongStore, type PlayerKeyType, type gameModeType } from '@/stores/pong';
+import { usePongStore, type gameModeType } from '@/stores/pong';
 import RacketComponent from './RacketComponent.vue';
 import { storeToRefs } from 'pinia';
 import { onUnmounted, ref, computed } from 'vue';

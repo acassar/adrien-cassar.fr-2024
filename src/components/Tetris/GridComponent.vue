@@ -5,7 +5,7 @@ import { inject } from 'vue';
 import { toRef } from 'vue';
 
 const {grid, gridSizeX} = defineProps<{
-	grid: Grid,
+	grid: Partial<Grid>,
 	gridSizeX: number,
 	gridSizeY: number,
 }>();

@@ -16,11 +16,19 @@ export class Grid {
 		}
 	}
 
+	/**
+	 * Can the block fall within the grid
+	 * @param block The block we test
+	 * @returns if the block can fall within the grid
+	 */
 	canFall = (block: PieceBlock): boolean => {
 		const cell = this.grid[block.position + this.gridSize.x];
 		return cell && cell.cellState !== CellState.OCCUPIED;
 	};
 
+	/**
+	 * Make a piece fall of 1 block
+	 */
 	fallActivePiece() {
 		const blocks = this.activePiece?.pieceBlocks;
 		if (blocks) {
@@ -35,6 +43,47 @@ export class Grid {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Will the block be off screen with an offset
+	 * @param block the tested block
+	 * @param offset -1 or 1 for the next position
+	 * @returns if the block will be off screen or not
+	 */
+	private willBeOffScreen(block: PieceBlock, offset: number): boolean {
+		return (block.position % this.gridSize.x) + offset < 0 || (block.position % this.gridSize.x) + offset >= this.gridSize.x;
+	}
+
+	/**
+	 * Move the piece to the left or right (if possible)
+	 * @param offset -1 or 1 for the next position
+	 */
+	private moveActivePiece(offset: number) {
+		if (this.activePiece?.pieceBlocks && !this.activePiece.pieceBlocks.some(block => this.willBeOffScreen(block, offset))) {
+			for (const block of this.activePiece.pieceBlocks) {
+				this.grid[block.position].cellState = CellState.EMPTY;
+			}
+			for (const block of this.activePiece.pieceBlocks) {
+				block.position = block.position + offset;
+				this.grid[block.position].cellState = CellState.PLAYERPIECE;
+			}
+		}
+	}
+
+	/**
+	 * Move the piece (if possible) to the left
+	 */
+	moveActivePieceLeft() {
+		console.log("moveActivePieceLeft");
+		this.moveActivePiece(-1);
+	}
+
+	/**
+	 * Move the piece (if possible) to the right
+	 */
+	moveActivePieceRight() {
+		this.moveActivePiece(1);
 	}
 
 	constructor(gridSize: GridSize) {
