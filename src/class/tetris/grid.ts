@@ -33,16 +33,39 @@ export class Grid {
 		this.blocks = this.blocks.concat(this.activePiece.pieceBlocks);
 	}
 
-	// fallEveryUpperBlock()
+	/**
+	 * Get the blocks of the line starting from index
+	 * @param index index of the grid on which blocks will be found on the line
+	 * @returns the blocks present on the line
+	 */
+	private getBlocksInRow(index: number) {
+		return this.blocks.filter(block => block.position >= index && block.position < index + this.gridSize.x);
+	}
+
+	/**
+	 * Fall all blocks in the grid that are upper from the index
+	 * @param index index of the grid from where to begin falling blocks
+	 */
+	private fallEveryUpperBlock(index: number) {
+		for (let i = index; i > 0; i -= this.gridSize.x) {
+			const blocks = this.getBlocksInRow(i);
+			for (const block of blocks) {
+				block.fall(this.gridSize);
+			}
+		}
+	}
 
 	/**
 	 * Handle when a row is full and remove it
 	 */
-	handleFullRow(){
+	private handleFullRow(){
 		for (let i = 0; i < this.grid.length; i += this.gridSize.x) {
-			const blocks = this.blocks.filter(block => block.position >= i && block.position < i + this.gridSize.x);
+			const blocks = this.getBlocksInRow(i);
+
+			//true if  it's a full row
 			if (blocks.length === this.gridSize.x) {
 				this.blocks = this.blocks.filter(block => !blocks.includes(block));
+				this.fallEveryUpperBlock(i);
 			}
 		}
 	}
