@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { CellState, type Cell } from '@/class/tetris/cell';
+import { Cell, CellState } from '@/class/tetris/cell';
+import type { Grid } from '@/class/tetris/grid';
 import { computed } from 'vue';
 import { ref } from 'vue';
 import { inject } from 'vue';
 
-const {cell} = defineProps<{
-	cell: Cell,
+const {grid, cell} = defineProps<{
+	grid: Partial<Grid>,
+	cell: Cell
 }>();
 
 const squareSize = inject('squareSize');
@@ -14,13 +16,18 @@ const cellStyle = ref({
 	height: `${squareSize}px`,
 });
 
+const getCellState = computed(() => {
+	return (grid as Grid).getCellState(cell.position);
+});
+
 const cellClass = computed(() => {
 	return {
 		cell: true,
-		occupied: cell.cellState === CellState.OCCUPIED,
-		playerPiece: cell.cellState === CellState.PLAYERPIECE
+		occupied: getCellState.value === CellState.OCCUPIED,
+		playerPiece: getCellState.value === CellState.PLAYERPIECE
 	};
 });
+
 
 </script>
 

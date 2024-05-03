@@ -11,34 +11,46 @@ export class Grid {
 	blocks: PieceBlock[];
 
 	/**
+	 * Get the state of a cell in the grid
+	 * @param position position of the cell
+	 * @returns the state of the cell
+	 */
+	getCellState(position: number) :CellState {
+		const foundBlock = this.blocks.find(block => block.position === position);
+		if (!foundBlock)
+			return CellState.EMPTY;
+		else if (this.activePiece?.pieceBlocks.some(block => block.position === position))
+			return CellState.PLAYERPIECE;
+		return CellState.OCCUPIED;
+	}
+
+	/**
 	 * Add a piece to the grid
 	 * @param piece the piece that will be added
 	 */
 	addPiece(piece: Piece): void {
 		this.activePiece = piece;
-		for (const block of piece.pieceBlocks) {
-			this.grid[block.position].cellState = CellState.PLAYERPIECE;
-		}
+		this.blocks = this.blocks.concat(this.activePiece.pieceBlocks);
+		debugger;
 	}
 
+	// fallEveryUpperBlock()
+
 	/**
-	 * Freeze the active piece in the grid
+	 * Handle when a row is full and remove it
 	 */
-	freezePiece(): void {
-		if (!this.activePiece)
-			throw Error("cannot find active piece");
-		for (const block of this.activePiece.pieceBlocks) {
-			this.grid[block.position].cellState = CellState.OCCUPIED;
-			this.activePiece = undefined;
+	handleFullRow(){
+		for (let i = 0; i < this.gridSize.y; i++) {
+			const cells = this.grid.slice(i * this.gridSize.x, (i + 1) * this.gridSize.x);
+			//todo
 		}
 	}
 
 	/**
-	  * Handle active piece collision with other pieces
-	  */
+	 * Handle active piece collision with other pieces
+	 */
 	handleCollision() {
-		this.freezePiece();
-		// this.handleFullRow();//TODO
+		this.handleFullRow();
 		this.addPiece(new TPiece(this.gridSize.x));
 	}
 
@@ -48,8 +60,9 @@ export class Grid {
 	 * @returns if the block can fall within the grid
 	 */
 	canFall = (block: PieceBlock): boolean => {
-		const cell = this.grid[block.position + this.gridSize.x];
-		return cell && cell.cellState !== CellState.OCCUPIED;
+		if (block.position + this.gridSize.x >= this.grid.length)
+			return false;
+		return !this.blocks.some((b) => b.position === block.position + this.gridSize.x && !this.activePiece?.pieceBlocks.some(pb => pb. position === b.position));
 	};
 
 	/**
@@ -58,14 +71,10 @@ export class Grid {
 	fallActivePiece() {
 		const blocks = this.activePiece?.pieceBlocks;
 		if (blocks) {
-			const pieceCanFall = !blocks.some(block => !this.canFall(block));
+			const pieceCanFall = blocks.every(block => this.canFall(block));
 			if (pieceCanFall) {
 				for (const block of blocks) {
-					this.grid[block.position].cellState = CellState.EMPTY;
-				}
-				for (const block of blocks.sort(block => -block.position)) {
 					block.fall(this.gridSize);
-					this.grid[block.position].cellState = CellState.PLAYERPIECE;
 				}
 			} else {
 				this.handleCollision();
@@ -90,11 +99,7 @@ export class Grid {
 	private moveActivePiece(offset: number) {
 		if (this.activePiece?.pieceBlocks && !this.activePiece.pieceBlocks.some(block => this.willBeOffScreen(block, offset))) {
 			for (const block of this.activePiece.pieceBlocks) {
-				this.grid[block.position].cellState = CellState.EMPTY;
-			}
-			for (const block of this.activePiece.pieceBlocks) {
 				block.position = block.position + offset;
-				this.grid[block.position].cellState = CellState.PLAYERPIECE;
 			}
 		}
 	}
@@ -103,7 +108,6 @@ export class Grid {
 	 * Move the piece (if possible) to the left
 	 */
 	moveActivePieceLeft() {
-		console.log("moveActivePieceLeft");
 		this.moveActivePiece(-1);
 	}
 
