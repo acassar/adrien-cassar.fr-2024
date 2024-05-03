@@ -39,9 +39,11 @@ export class Grid {
 	 * Handle when a row is full and remove it
 	 */
 	handleFullRow(){
-		for (let i = 0; i < this.gridSize.y; i++) {
-			const cells = this.grid.slice(i * this.gridSize.x, (i + 1) * this.gridSize.x);
-			//todo
+		for (let i = 0; i < this.grid.length; i += this.gridSize.x) {
+			const blocks = this.blocks.filter(block => block.position >= i && block.position < i + this.gridSize.x);
+			if (blocks.length === this.gridSize.x) {
+				this.blocks = this.blocks.filter(block => !blocks.includes(block));
+			}
 		}
 	}
 
