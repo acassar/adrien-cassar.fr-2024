@@ -75,7 +75,7 @@ export class Grid {
 	 */
 	handleCollision() {
 		this.handleFullRow();
-		this.addPiece(new TPiece(this.gridSize.x));
+		this.addPiece(new TPiece(this.gridSize));
 	}
 
 	/**
@@ -153,6 +153,12 @@ export class Grid {
 	 */
 	moveActivePieceRight() {
 		this.moveActivePiece(1);
+	}
+
+	rotateActivePiece() {
+		if (!this.activePiece)
+			throw new Error("Active piece should exist at this point");
+		this.activePiece!.rotate();
 	}
 
 	constructor(gridSize: GridSize) {

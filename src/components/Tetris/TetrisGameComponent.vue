@@ -14,7 +14,7 @@ provide("squareSize", SQUARESIZE);
 const gameSpeed = ref(1000);
 
 onMounted(() => {
-	grid.value.addPiece(new TPiece(gridSizeX));
+	grid.value.addPiece(new TPiece({x: gridSizeX, y: gridSizeY}));
 });
 
 const interval = setInterval(() => {
@@ -37,7 +37,7 @@ const keyDownEvent = (event: KeyboardEvent) => {
 			grid.value.fallActivePiece();
 			break;
 		case "ArrowUp":
-			// grid.value.rotateActivePiece(); => TODO
+			grid.value.rotateActivePiece();
 			break;
 		default:
 			break;
