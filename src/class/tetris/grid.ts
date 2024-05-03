@@ -98,9 +98,7 @@ export class Grid {
 	 */
 	private moveActivePiece(offset: number) {
 		if (this.activePiece?.pieceBlocks && !this.activePiece.pieceBlocks.some(block => this.willBeOffScreen(block, offset))) {
-			for (const block of this.activePiece.pieceBlocks) {
-				block.position = block.position + offset;
-			}
+			this.activePiece.move(offset);
 		}
 	}
 
