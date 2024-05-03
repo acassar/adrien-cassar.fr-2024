@@ -31,7 +31,6 @@ export class Grid {
 	addPiece(piece: Piece): void {
 		this.activePiece = piece;
 		this.blocks = this.blocks.concat(this.activePiece.pieceBlocks);
-		debugger;
 	}
 
 	// fallEveryUpperBlock()
@@ -59,26 +58,35 @@ export class Grid {
 	 * @param block The block we test
 	 * @returns if the block can fall within the grid
 	 */
-	canFall = (block: PieceBlock): boolean => {
-		if (block.position + this.gridSize.x >= this.grid.length)
-			return false;
-		return !this.blocks.some((b) => b.position === block.position + this.gridSize.x && !this.activePiece?.pieceBlocks.some(pb => pb. position === b.position));
+	private canPieceMove = (piece: Piece, offset: number): boolean => {
+		const filteredBlocks = this.blocks.filter((b) => !piece.pieceBlocks.includes(b));
+		const {pieceBlocks} = piece;
+
+		const isThereAnyOtherBlockHere = (block: PieceBlock) => filteredBlocks.some((b) => b.position === block.position + offset);
+		const willBeOffScreenVertically = (block: PieceBlock) => block.position + offset >= this.grid.length;
+
+		for (const block of pieceBlocks) {
+			if (willBeOffScreenVertically(block) || isThereAnyOtherBlockHere(block))
+				return false;
+
+		}
+		return true;
 	};
 
 	/**
 	 * Make a piece fall of 1 block
 	 */
 	fallActivePiece() {
-		const blocks = this.activePiece?.pieceBlocks;
-		if (blocks) {
-			const pieceCanFall = blocks.every(block => this.canFall(block));
-			if (pieceCanFall) {
-				for (const block of blocks) {
-					block.fall(this.gridSize);
-				}
-			} else {
-				this.handleCollision();
+		if (!this.activePiece)
+			throw new Error("Active piece should exist at this point");
+		const pieceCanFall = this.canPieceMove(this.activePiece, this.gridSize.x);
+		const {pieceBlocks} = this.activePiece;
+		if (pieceCanFall) {
+			for (const block of pieceBlocks) {
+				block.fall(this.gridSize);
 			}
+		} else {
+			this.handleCollision();
 		}
 	}
 
@@ -88,8 +96,14 @@ export class Grid {
 	 * @param offset -1 or 1 for the next position
 	 * @returns if the block will be off screen or not
 	 */
-	private willBeOffScreen(block: PieceBlock, offset: number): boolean {
+	private willBeOffScreenHorizontally(block: PieceBlock, offset: number): boolean {
 		return (block.position % this.gridSize.x) + offset < 0 || (block.position % this.gridSize.x) + offset >= this.gridSize.x;
+	}
+
+	private canActivePiecemove(offset: number): boolean {
+		if (!this.activePiece)
+			return false;
+		return this.canPieceMove(this.activePiece, offset) && !this.activePiece.pieceBlocks.some(block => this.willBeOffScreenHorizontally(block, offset));
 	}
 
 	/**
@@ -97,8 +111,8 @@ export class Grid {
 	 * @param offset -1 or 1 for the next position
 	 */
 	private moveActivePiece(offset: number) {
-		if (this.activePiece?.pieceBlocks && !this.activePiece.pieceBlocks.some(block => this.willBeOffScreen(block, offset))) {
-			this.activePiece.move(offset);
+		if (this.canActivePiecemove(offset)) {
+			this.activePiece!.move(offset);
 		}
 	}
 
