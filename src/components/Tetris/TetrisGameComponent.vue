@@ -3,6 +3,7 @@ import {onMounted, provide} from 'vue';
 import GridComponent from './GridComponent.vue';
 import { Grid } from '@/class/tetris/grid';
 import { TPiece } from '@/class/tetris/pieces/TPiece';
+import { LMirrorPiece } from '@/class/tetris/pieces/LMirrorPiece';
 import { ref } from 'vue';
 import { onUnmounted } from 'vue';
 const gridSizeY = 22;
@@ -14,7 +15,8 @@ provide("squareSize", SQUARESIZE);
 const gameSpeed = ref(1000);
 
 onMounted(() => {
-	grid.value.addPiece(new TPiece({x: gridSizeX, y: gridSizeY}));
+	// grid.value.addPiece(new TPiece({x: gridSizeX, y: gridSizeY}));
+	grid.value.addPiece(new LMirrorPiece({x: gridSizeX, y: gridSizeY}));
 });
 
 const interval = setInterval(() => {
