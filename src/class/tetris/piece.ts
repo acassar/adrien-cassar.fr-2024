@@ -34,29 +34,48 @@ export abstract class Piece {
 	rotate(): void {
 		switch (this.actualRotation) {
 			case 'top':
-				if (this.rotateFromTop())
+				if (this.canRotateFromTop()){
+					this.applyRotation();
 					this.actualRotation = 'right';
+				}
 				break;
 			case 'right':
-				if (this.rotateFromRight())
+				if (this.canRotateFromRight()) {
+					this.applyRotation();
 					this.actualRotation = 'bottom';
+				}
 				break;
 			case 'bottom':
-				if (this.rotateFromBottom())
+				if (this.canRotateFromBottom()){
+					this.applyRotation();
 					this.actualRotation = 'left';
+				}
 				break;
 			case 'left':
-				if (this.rotateFromLeft())
+				if (this.canRotateFromLeft()){
+					this.applyRotation();
 					this.actualRotation = 'top';
+				}
 				break;
 			default: throw new Error(`Invalid rotation: ${this.actualRotation}`);
 		}
 	}
 
-	abstract rotateFromTop(): boolean;
-	abstract rotateFromRight(): boolean;
-	abstract rotateFromBottom(): boolean;
-	abstract rotateFromLeft(): boolean;
+	applyRotation() {
+		const positions = this.getFuturePositions();
+		for (const [block, position] of positions) {
+			block.position = position;
+		}
+	}
+
+	// canRotate(): boolean {
+
+	//  }
+	abstract getFuturePositions(): [PieceBlock, number][];
+	abstract canRotateFromTop(): boolean;
+	abstract canRotateFromRight(): boolean;
+	abstract canRotateFromBottom(): boolean;
+	abstract canRotateFromLeft(): boolean;
 
 	/**
 	 * Constructor for the piece.

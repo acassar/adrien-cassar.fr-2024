@@ -4,37 +4,51 @@ import { PieceBlock } from "../pieceBlock";
 
 export class TPiece extends Piece {
 
-	rotateFromTop(): boolean {
+	getFuturePositions(): [PieceBlock, number][] {
+		switch (this.actualRotation) {
+			case 'top':
+				return [[this.pieceBlocks[2], this.pieceBlocks[2].position - (this.gridSize.x + 1)]];
+			case 'right':
+				return [[this.pieceBlocks[3], this.pieceBlocks[3].position - (this.gridSize.x - 1)]];
+			case 'bottom':
+				return [[this.pieceBlocks[0], this.pieceBlocks[0].position + (this.gridSize.x + 1)]];
+			case 'left':
+				return [
+					[this.pieceBlocks[0], this.pieceBlocks[0].position - (this.gridSize.x + 1)],
+					[this.pieceBlocks[2], this.pieceBlocks[2].position + (this.gridSize.x + 1)],
+					[this.pieceBlocks[3], this.pieceBlocks[3].position + (this.gridSize.x - 1)],
+				];
+			default: throw Error("Unknown rotation: " + this.actualRotation);
+
+		}
+	}
+
+	canRotateFromTop(): boolean {
 		if (this.pieceBlocks[2].isFarTop(this.gridSize.x)) {
 			this.fall();
 		}
-		this.pieceBlocks[2].position = this.pieceBlocks[2].position - (this.gridSize.x + 1);
 		return true;
 	}
 
-	rotateFromRight(): boolean {
+	canRotateFromRight(): boolean {
 		if (this.pieceBlocks[3].isFarRight(this.gridSize.x)) {
 			this.move(-1);
 		}
-		this.pieceBlocks[3].position = this.pieceBlocks[3].position - (this.gridSize.x - 1);
 		return true;
 	}
 
-	rotateFromBottom(): boolean {
+	canRotateFromBottom(): boolean {
 		if (!this.pieceBlocks[0].isFarBottom(this.gridSize)) {
-			this.pieceBlocks[0].position = this.pieceBlocks[0].position + (this.gridSize.x + 1);
+
 			return true;
 		}
 		return false;
 	}
 
-	rotateFromLeft(): boolean {
+	canRotateFromLeft(): boolean {
 		if (this.pieceBlocks[0].isFarLeft(this.gridSize.x)) {
 			this.move(1);
 		}
-		this.pieceBlocks[0].position = this.pieceBlocks[0].position - (this.gridSize.x + 1);
-		this.pieceBlocks[2].position = this.pieceBlocks[2].position + (this.gridSize.x + 1);
-		this.pieceBlocks[3].position = this.pieceBlocks[3].position + (this.gridSize.x - 1);
 		return true;
 	}
 
