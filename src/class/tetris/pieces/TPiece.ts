@@ -4,21 +4,38 @@ import { PieceBlock } from "../pieceBlock";
 
 export class TPiece extends Piece {
 
-	rotateFromTop(): void {
+	rotateFromTop(): boolean {
+		if (this.pieceBlocks[2].isFarTop(this.gridSize.x)) {
+			this.fall();
+		}
 		this.pieceBlocks[2].position = this.pieceBlocks[2].position - (this.gridSize.x + 1);
+		return true;
 	}
 
-	rotateFromRight(): void {
+	rotateFromRight(): boolean {
+		if (this.pieceBlocks[3].isFarRight(this.gridSize.x)) {
+			this.move(-1);
+		}
 		this.pieceBlocks[3].position = this.pieceBlocks[3].position - (this.gridSize.x - 1);
+		return true;
 	}
 
-	rotateFromBottom(): void {
-		this.pieceBlocks[0].position = this.pieceBlocks[0].position + (this.gridSize.x + 1);
+	rotateFromBottom(): boolean {
+		if (!this.pieceBlocks[0].isFarBottom(this.gridSize)) {
+			this.pieceBlocks[0].position = this.pieceBlocks[0].position + (this.gridSize.x + 1);
+			return true;
+		}
+		return false;
 	}
-	rotateFromLeft(): void {
+
+	rotateFromLeft(): boolean {
+		if (this.pieceBlocks[0].isFarLeft(this.gridSize.x)) {
+			this.move(1);
+		}
 		this.pieceBlocks[0].position = this.pieceBlocks[0].position - (this.gridSize.x + 1);
 		this.pieceBlocks[2].position = this.pieceBlocks[2].position + (this.gridSize.x + 1);
 		this.pieceBlocks[3].position = this.pieceBlocks[3].position + (this.gridSize.x - 1);
+		return true;
 	}
 
 	constructor(gridSize: GridSize) {

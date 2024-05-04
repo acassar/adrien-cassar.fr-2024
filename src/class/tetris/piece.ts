@@ -8,39 +8,61 @@ export abstract class Piece {
 	actualRotation: PieceRotationType;
 	gridSize: GridSize;
 
+	/**
+	 * Moves the piece blocks by the specified offset.
+	 * @param offset The amount to move the blocks.
+	 */
 	move(offset: number) {
 		this.pieceBlocks.forEach(pieceBlock => {
 			pieceBlock.position = pieceBlock.position + offset;
 		});
 	}
 
+	/**
+	 * Drops the piece blocks to the next lower position.
+	 * @param gridSize The size of the grid.
+	 */
+	fall() {
+		this.pieceBlocks.forEach(pieceBlock => {
+			pieceBlock.fall(this.gridSize);
+		});
+	}
+
+	/**
+	 * Rotates the piece in the specified direction.
+	 */
 	rotate(): void {
 		switch (this.actualRotation) {
 			case 'top':
-				this.rotateFromTop();
-				this.actualRotation = 'right';
+				if (this.rotateFromTop())
+					this.actualRotation = 'right';
 				break;
 			case 'right':
-				this.rotateFromRight();
-				this.actualRotation = 'bottom';
+				if (this.rotateFromRight())
+					this.actualRotation = 'bottom';
 				break;
 			case 'bottom':
-				this.rotateFromBottom();
-				this.actualRotation = 'left';
+				if (this.rotateFromBottom())
+					this.actualRotation = 'left';
 				break;
 			case 'left':
-				this.rotateFromLeft();
-				this.actualRotation = 'top';
+				if (this.rotateFromLeft())
+					this.actualRotation = 'top';
 				break;
 			default: throw new Error(`Invalid rotation: ${this.actualRotation}`);
 		}
 	}
 
-	abstract rotateFromTop(): void;
-	abstract rotateFromRight(): void;
-	abstract rotateFromBottom(): void;
-	abstract rotateFromLeft(): void;
+	abstract rotateFromTop(): boolean;
+	abstract rotateFromRight(): boolean;
+	abstract rotateFromBottom(): boolean;
+	abstract rotateFromLeft(): boolean;
 
+	/**
+	 * Constructor for the piece.
+	 * @param pieceBlocks The blocks that make up the piece.
+	 * @param gridSize The size of the grid.
+	 */
 	constructor(pieceBlocks: PieceBlock[], gridSize: GridSize) {
 		this.pieceBlocks = pieceBlocks;
 		this.actualRotation = 'top';
