@@ -13,31 +13,26 @@ export class IPiece extends Piece {
      * @returns An array of arrays, where each inner array contains a PieceBlock object and its new position after rotation.
      */
 	getFuturePositions(): [PieceBlock, number][] {
+		const initialPositions: [PieceBlock, number][] = [
+			[this.pieceBlocks[0], this.pieceBlocks[0].position + this.gridSize.x + 1],
+			[this.pieceBlocks[2], this.pieceBlocks[2].position - this.gridSize.x - 1],
+			[this.pieceBlocks[3], this.pieceBlocks[3].position - this.gridSize.x * 2 - 2],
+		];
+
+		const rotatePositions: [PieceBlock, number][] = [
+			[this.pieceBlocks[0], this.pieceBlocks[0].position - this.gridSize.x - 1],
+			[this.pieceBlocks[2], this.pieceBlocks[2].position + this.gridSize.x + 1],
+			[this.pieceBlocks[3], this.pieceBlocks[3].position + this.gridSize.x * 2 + 2],
+		];
 		switch (this.actualRotation) {
 			case 'top':
-				return [
-					[this.pieceBlocks[0], this.pieceBlocks[0].position + this.gridSize.x + 1],
-					[this.pieceBlocks[2], this.pieceBlocks[2].position - this.gridSize.x - 1],
-					[this.pieceBlocks[3], this.pieceBlocks[3].position - this.gridSize.x * 2 - 2],
-				];
+				return initialPositions;
 			case 'right':
-				return [
-					[this.pieceBlocks[0], this.pieceBlocks[0].position - this.gridSize.x - 1],
-					[this.pieceBlocks[2], this.pieceBlocks[2].position + this.gridSize.x + 1],
-					[this.pieceBlocks[3], this.pieceBlocks[3].position + this.gridSize.x * 2 + 2],
-				];
+				return rotatePositions;
 			case 'bottom':
-				return [
-					[this.pieceBlocks[0], this.pieceBlocks[0].position + this.gridSize.x + 1],
-					[this.pieceBlocks[2], this.pieceBlocks[2].position - this.gridSize.x - 1],
-					[this.pieceBlocks[3], this.pieceBlocks[3].position - this.gridSize.x * 2 - 2],
-				];
+				return initialPositions;
 			case 'left':
-				return [
-					[this.pieceBlocks[0], this.pieceBlocks[0].position - this.gridSize.x - 1],
-					[this.pieceBlocks[2], this.pieceBlocks[2].position + this.gridSize.x + 1],
-					[this.pieceBlocks[3], this.pieceBlocks[3].position + this.gridSize.x * 2 + 2],
-				];
+				return rotatePositions;
 			default:
 				throw Error("Unknown rotation: " + this.actualRotation);
 		}
