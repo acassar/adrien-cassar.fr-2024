@@ -78,14 +78,20 @@ export class Grid {
 		this.addPiece(new TPiece(this.gridSize));
 	}
 
+	private getFreezedBlocks(){
+		if (!this.activePiece)
+			throw Error("No active piece");
+		return this.blocks.filter(block => !(this.activePiece!.pieceBlocks.map(e => e.position).includes(block.position)));
+	}
+
 	/**
 	 * Can the block fall within the grid
 	 * @param block The block we test
 	 * @returns if the block can fall within the grid
 	 */
-	private canPieceMove = (piece: Piece, offset: number): boolean => {
-		const filteredBlocks = this.blocks.filter((b) => !piece.pieceBlocks.includes(b));
-		const {pieceBlocks} = piece;
+	private canPieceMove = (offset: number): boolean => {
+		const filteredBlocks = this.getFreezedBlocks();
+		const {pieceBlocks} = this.activePiece!;
 
 		const isThereAnyOtherBlockHere = (block: PieceBlock) => filteredBlocks.some((b) => b.position === block.position + offset);
 		const willBeOffScreenVertically = (block: PieceBlock) => block.position + offset >= this.grid.length;
@@ -104,7 +110,7 @@ export class Grid {
 	fallActivePiece() {
 		if (!this.activePiece)
 			throw new Error("Active piece should exist at this point");
-		const pieceCanFall = this.canPieceMove(this.activePiece, this.gridSize.x);
+		const pieceCanFall = this.canPieceMove(this.gridSize.x);
 		const {pieceBlocks} = this.activePiece;
 		if (pieceCanFall) {
 			for (const block of pieceBlocks) {
@@ -128,7 +134,7 @@ export class Grid {
 	private canActivePiecemove(offset: number): boolean {
 		if (!this.activePiece)
 			return false;
-		return this.canPieceMove(this.activePiece, offset) && !this.activePiece.pieceBlocks.some(block => this.willBeOffScreenHorizontally(block, offset));
+		return this.canPieceMove(offset) && !this.activePiece.pieceBlocks.some(block => this.willBeOffScreenHorizontally(block, offset));
 	}
 
 	/**
@@ -158,7 +164,14 @@ export class Grid {
 	rotateActivePiece() {
 		if (!this.activePiece)
 			throw new Error("Active piece should exist at this point");
-		this.activePiece!.rotate();
+		const futurePos = this.activePiece.getFuturePositions();
+		const canRotate = futurePos.every((p) => {
+			const [_, pos] = p;
+			const cellOccupiedByBlock = this.getFreezedBlocks().find((block) => block.position === pos);
+			return !cellOccupiedByBlock;
+		});
+		if (canRotate)
+			this.activePiece!.rotate();
 	}
 
 	constructor(gridSize: GridSize) {
