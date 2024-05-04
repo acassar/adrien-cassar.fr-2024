@@ -20,13 +20,7 @@ provide("squareSize", SQUARESIZE);
 const gameSpeed = ref(1000);
 
 onMounted(() => {
-	// grid.value.addPiece(new TPiece({x: gridSizeX, y: gridSizeY}));
-	// grid.value.addPiece(new LMirrorPiece({x: gridSizeX, y: gridSizeY}));
-	// grid.value.addPiece(new LPiece({x: gridSizeX, y: gridSizeY}));
-	// grid.value.addPiece(new IPiece({x: gridSizeX, y: gridSizeY}));
-	// grid.value.addPiece(new SquarePiece({x: gridSizeX, y: gridSizeY}));
-	// grid.value.addPiece(new SPiece({x: gridSizeX, y: gridSizeY}));
-	grid.value.addPiece(new SMirrorPiece({x: gridSizeX, y: gridSizeY}));
+	grid.value.addPiece(grid.value.getNewPiece());
 });
 
 const interval = setInterval(() => {

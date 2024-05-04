@@ -3,6 +3,12 @@ import { Cell, CellState } from "./cell";
 import type { Piece } from "./piece";
 import type { PieceBlock } from "./pieceBlock";
 import { TPiece } from "./pieces/TPiece";
+import { LPiece } from "./pieces/LPiece";
+import { IPiece } from "./pieces/IPiece";
+import { LMirrorPiece } from "./pieces/LMirrorPiece";
+import { SPiece } from "./pieces/SPiece";
+import { SMirrorPiece } from "./pieces/SMirrorPiece";
+import { SquarePiece } from "./pieces/SquarePiece";
 
 /**
  * Represents the game grid.
@@ -24,6 +30,28 @@ export class Grid {
 		if (!foundBlock) return CellState.EMPTY;
 		else if (this.activePiece?.pieceBlocks.some(block => block.position === position)) return CellState.PLAYERPIECE;
 		return CellState.OCCUPIED;
+	}
+
+	getNewPiece() {
+		const randomNumber = Math.round(Math.random() * 6);
+		switch (randomNumber) {
+			case 0:
+				return new TPiece(this.gridSize);
+			case 1:
+				return new LPiece(this.gridSize);
+			case 2:
+				return new IPiece(this.gridSize);
+			case 3:
+				return new LMirrorPiece(this.gridSize);
+			case 4:
+				return new SPiece(this.gridSize);
+			case 5:
+				return new SMirrorPiece(this.gridSize);
+			case 6:
+				return new SquarePiece(this.gridSize);
+			default:
+				return new TPiece(this.gridSize);
+		}
 	}
 
 	/**
@@ -75,7 +103,7 @@ export class Grid {
    */
 	handleCollision(): void {
 		this.handleFullRow();
-		this.addPiece(new TPiece(this.gridSize));
+		this.addPiece(this.getNewPiece());
 	}
 
 	/**
