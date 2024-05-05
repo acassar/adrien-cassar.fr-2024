@@ -19,6 +19,7 @@ export class Grid {
 	activePiece: Piece | undefined;
 	gridSize: GridSize;
 	blocks: PieceBlock[];
+	gameOver: boolean;
 
 	/**
    * Get the state of a cell in the grid.
@@ -103,16 +104,19 @@ export class Grid {
    */
 	handleCollision(): void {
 		this.handleFullRow();
-		this.addPiece(this.getNewPiece());
+		this.activePiece = undefined;
+		const newPiece = this.getNewPiece();
+		if (this.canPieceMove(newPiece, 1))
+			this.addPiece(newPiece);
+		else this.gameOver = true;
 	}
 
 	/**
    * Get the blocks that the active piece can move to.
    * @returns The blocks that the active piece can move to.
    */
-	private getFreezedBlocks(): PieceBlock[] {
-		if (!this.activePiece) throw Error("No active piece");
-		return this.blocks.filter(block => !(this.activePiece!.pieceBlocks.map(e => e.position).includes(block.position)));
+	private getFreezedBlocks(piece: Piece): PieceBlock[] {
+		return this.blocks.filter(block => !(piece.pieceBlocks.map(e => e.position).includes(block.position)));
 	}
 
 	/**
@@ -120,9 +124,9 @@ export class Grid {
    * @param block The block we test.
    * @returns If the block can fall within the grid.
    */
-	private canPieceMove(offset: number): boolean {
-		const filteredBlocks = this.getFreezedBlocks();
-		const {pieceBlocks} = this.activePiece!;
+	private canPieceMove(piece: Piece, offset: number): boolean {
+		const filteredBlocks = this.getFreezedBlocks(piece);
+		const {pieceBlocks} = piece;
 		const isThereAnyOtherBlockHere = (block: PieceBlock) => filteredBlocks.some((b) => b.position === block.position + offset);
 		const willBeOffScreenVertically = (block: PieceBlock) => block.position + offset >= this.grid.length;
 		for (const block of pieceBlocks) {
@@ -136,7 +140,7 @@ export class Grid {
    */
 	fallActivePiece(): void {
 		if (!this.activePiece) throw new Error("Active piece should exist at this point");
-		const pieceCanFall = this.canPieceMove(this.gridSize.x);
+		const pieceCanFall = this.canPieceMove(this.activePiece, this.gridSize.x);
 		const {pieceBlocks} = this.activePiece!;
 		if (pieceCanFall) {
 			for (const block of pieceBlocks) {
@@ -164,7 +168,7 @@ export class Grid {
    */
 	private canActivePiecemove(offset: number): boolean {
 		if (!this.activePiece) return false;
-		return this.canPieceMove(offset) && !this.activePiece.pieceBlocks.some(block => this.willBeOffScreenHorizontally(block, offset));
+		return this.canPieceMove(this.activePiece, offset) && !this.activePiece.pieceBlocks.some(block => this.willBeOffScreenHorizontally(block, offset));
 	}
 
 	/**
@@ -199,7 +203,7 @@ export class Grid {
 		const futurePos = this.activePiece.getFuturePositions();
 		const canRotate = futurePos.every((p) => {
 			const [_, pos] = p;
-			const cellOccupiedByBlock = this.getFreezedBlocks().find((block) => block.position === pos);
+			const cellOccupiedByBlock = this.getFreezedBlocks(this.activePiece!).find((block) => block.position === pos);
 			return !cellOccupiedByBlock;
 		});
 		if (canRotate) {
@@ -215,6 +219,7 @@ export class Grid {
 		this.gridSize = gridSize;
 		this.grid = new Array<Cell>(gridSize.x * gridSize.y);
 		this.blocks = [];
+		this.gameOver = false;
 		for (let i = 0; i < this.grid.length; i++) {
 			this.grid[i] = new Cell(i);
 		}

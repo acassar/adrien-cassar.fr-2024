@@ -2,19 +2,15 @@
 import {onMounted, provide} from 'vue';
 import GridComponent from './GridComponent.vue';
 import { Grid } from '@/class/tetris/grid';
-import { TPiece } from '@/class/tetris/pieces/TPiece';
-import { LMirrorPiece } from '@/class/tetris/pieces/LMirrorPiece';
-import { LPiece } from '@/class/tetris/pieces/LPiece';
-import { IPiece } from '@/class/tetris/pieces/IPiece';
-import { SPiece } from '@/class/tetris/pieces/SPiece';
-import { SMirrorPiece } from '@/class/tetris/pieces/SMirrorPiece';
-import { SquarePiece } from '@/class/tetris/pieces/SquarePiece';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { onUnmounted } from 'vue';
 const gridSizeY = 22;
 const gridSizeX = 10;
 const SQUARESIZE = Math.floor(window.innerHeight / gridSizeY - 1);
 const grid = ref(new Grid({x: gridSizeX, y: gridSizeY}));
+
+
+const isGameOVer = computed(() => grid.value.gameOver);
 
 provide("squareSize", SQUARESIZE);
 const gameSpeed = ref(1000);
@@ -24,7 +20,8 @@ onMounted(() => {
 });
 
 const interval = setInterval(() => {
-	grid.value.fallActivePiece();
+	if (!grid.value.gameOver)
+		grid.value.fallActivePiece();
 }, gameSpeed.value);
 
 onUnmounted(() => {
@@ -32,22 +29,23 @@ onUnmounted(() => {
 });
 
 const keyDownEvent = (event: KeyboardEvent) => {
-	switch (event.key) {
-		case "ArrowLeft":
-			grid.value.moveActivePieceLeft();
-			break;
-		case "ArrowRight":
-			grid.value.moveActivePieceRight();
-			break;
-		case "ArrowDown":
-			grid.value.fallActivePiece();
-			break;
-		case "ArrowUp":
-			grid.value.rotateActivePiece();
-			break;
-		default:
-			break;
-	}
+	if (!grid.value.gameOver)
+		switch (event.key) {
+			case "ArrowLeft":
+				grid.value.moveActivePieceLeft();
+				break;
+			case "ArrowRight":
+				grid.value.moveActivePieceRight();
+				break;
+			case "ArrowDown":
+				grid.value.fallActivePiece();
+				break;
+			case "ArrowUp":
+				grid.value.rotateActivePiece();
+				break;
+			default:
+				break;
+		}
 };
 
 addEventListener('keydown', keyDownEvent);
