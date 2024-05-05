@@ -4,6 +4,8 @@ import GridComponent from './GridComponent.vue';
 import { Grid } from '@/class/tetris/grid';
 import { ref, computed } from 'vue';
 import { onUnmounted } from 'vue';
+import ButtonComponent from '../common/ButtonComponent.vue';
+import GameOverComponent from './GameOverComponent.vue';
 const gridSizeY = 22;
 const gridSizeX = 10;
 const SQUARESIZE = Math.floor(window.innerHeight / gridSizeY - 1);
@@ -58,11 +60,24 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <GridComponent
-    :grid="grid"
-    :grid-size-x="gridSizeX"
-    :grid-size-y="gridSizeY"
-  />
+  <div class="d-flex">
+    <div class="flex">
+      <router-link
+        to="/"
+      >
+        <ButtonComponent>Retour</ButtonComponent>
+      </router-link>
+    </div>
+    <GridComponent
+      :grid="grid"
+      :grid-size-x="gridSizeX"
+      :grid-size-y="gridSizeY"
+    />
+    <GameOverComponent
+      :is-game-over="isGameOVer"
+      @reset="() => grid.reset()"
+    />
+  </div>
 </template>
 
 <style scoped>

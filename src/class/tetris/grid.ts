@@ -55,6 +55,12 @@ export class Grid {
 		}
 	}
 
+	reset() {
+		this.blocks = [];
+		this.addPiece(this.getNewPiece());
+		this.gameOver = false;
+	}
+
 	/**
    * Add a piece to the grid.
    * @param piece The piece that will be added.
