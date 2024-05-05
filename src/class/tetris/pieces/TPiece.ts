@@ -80,7 +80,8 @@ export class TPiece extends Piece {
      * @param gridSize The size of the grid.
      */
 	constructor(gridSize: GridSize) {
+		const color = Piece.generateColor();
 		const pieceOrigin = Math.floor(gridSize.x / 2 - 1);
-		super([new PieceBlock(pieceOrigin), new PieceBlock(pieceOrigin + 1), new PieceBlock(pieceOrigin + 2), new PieceBlock(pieceOrigin + 1 + gridSize.x)], gridSize);
+		super([new PieceBlock(pieceOrigin, color), new PieceBlock(pieceOrigin + 1, color), new PieceBlock(pieceOrigin + 2, color), new PieceBlock(pieceOrigin + 1 + gridSize.x, color)], gridSize);
 	}
 }

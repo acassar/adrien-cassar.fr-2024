@@ -2,6 +2,7 @@ import type { GridSize } from "@/types/tetris/grid";
 
 export class PieceBlock {
 	position: number;
+	color: string;
 
 	/**
      * Returns the column index of the block in the grid.
@@ -58,7 +59,8 @@ export class PieceBlock {
 		this.position = this.position + gridSize.x;
 	}
 
-	constructor(position: number) {
+	constructor(position: number, color: string) {
 		this.position = position;
+		this.color = color;
 	}
 }

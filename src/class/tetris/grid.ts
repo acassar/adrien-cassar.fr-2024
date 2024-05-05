@@ -1,6 +1,6 @@
 import type { GridSize } from "@/types/tetris/grid";
 import { Cell, CellState } from "./cell";
-import type { Piece } from "./piece";
+import type { Piece, PieceRotationType } from "./piece";
 import type { PieceBlock } from "./pieceBlock";
 import { TPiece } from "./pieces/TPiece";
 import { LPiece } from "./pieces/LPiece";
@@ -22,15 +22,13 @@ export class Grid {
 	gameOver: boolean;
 
 	/**
-   * Get the state of a cell in the grid.
+   * Get the block at this position.
    * @param position The position of the cell.
-   * @returns The state of the cell.
+   * @returns The block qt this position.
    */
-	getCellState(position: number): CellState {
+	getBlock(position: number): PieceBlock | undefined {
 		const foundBlock = this.blocks.find(block => block.position === position);
-		if (!foundBlock) return CellState.EMPTY;
-		else if (this.activePiece?.pieceBlocks.some(block => block.position === position)) return CellState.PLAYERPIECE;
-		return CellState.OCCUPIED;
+		return foundBlock;
 	}
 
 	getNewPiece() {

@@ -10,41 +10,31 @@ const {grid, cell} = defineProps<{
 	cell: Cell
 }>();
 
+const getCellColor = computed(() => {
+	return (grid as Grid).getBlock(cell.position)?.color;
+});
+
 const squareSize = inject('squareSize');
 const cellStyle = ref({
 	width: `${squareSize}px`,
 	height: `${squareSize}px`,
+	'background-color': getCellColor
 });
 
-const getCellState = computed(() => {
-	return (grid as Grid).getCellState(cell.position);
-});
 
-const cellClass = computed(() => {
-	return {
-		cell: true,
-		occupied: getCellState.value === CellState.OCCUPIED,
-		playerPiece: getCellState.value === CellState.PLAYERPIECE
-	};
-});
+
 
 
 </script>
 
 <template>
   <div
-    :class="cellClass"
+    class="cell"
     :style="cellStyle"
   />
 </template>
 
 <style scoped>
-.occupied {
-  background-color: red;
-}
-.playerPiece {
-  background-color: blue;
-}
 .cell {
     border: solid 1px rgba(64, 56, 92, 0.281);
     display: block;

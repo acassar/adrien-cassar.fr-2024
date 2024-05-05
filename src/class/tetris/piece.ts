@@ -77,6 +77,10 @@ export abstract class Piece {
 	abstract canRotateFromBottom(): boolean;
 	abstract canRotateFromLeft(): boolean;
 
+	static generateColor(): string {
+		return '#' + Math.floor(Math.random() * 16777215).toString(16);
+	}
+
 	/**
 	 * Constructor for the piece.
 	 * @param pieceBlocks The blocks that make up the piece.
